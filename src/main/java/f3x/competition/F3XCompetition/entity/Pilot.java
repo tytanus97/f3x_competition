@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name="pilot")
@@ -36,6 +37,10 @@ public class Pilot {
     @Column(name="pilot_rating")
     @JsonProperty
     private float pilotRating;
+
+    @OneToMany(mappedBy = "pilot")
+    @JsonProperty
+    private List<Plane> pilotPlanes;
 
     public Pilot() {
     }
