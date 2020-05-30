@@ -1,22 +1,47 @@
 package f3x.competition.F3XCompetition.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
 import java.sql.Timestamp;
 
 
 @Entity
 @Table(name="event")
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Event {
     @Id
     @Column(name="event_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "event_id_generator")
     @SequenceGenerator(name="event_id_generator",initialValue = 1,sequenceName = "event_id_seq")
+    @JsonProperty
     private Long eventId;
+
+    @Column(name="event_round_count")
+    @JsonProperty
     private byte eventRoundCount;
+
+    @Column(name="event_name")
+    @JsonProperty
     private String eventName;
+
+    @ManyToOne
+    @JoinColumn(name="location_id")
+    @JsonProperty
     private Location location;
+
+    @ManyToOne
+    @JoinColumn(name="competition_class_id")
+    @JsonProperty
     private CompetitionClass competitionClass;
+
+    @Column(name="start_date")
+    @JsonProperty
     private Timestamp startDate;
+
+    @Column(name="end_date")
+    @JsonProperty
     private Timestamp endDate;
 
 
