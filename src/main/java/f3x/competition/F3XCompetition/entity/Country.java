@@ -2,7 +2,6 @@ package f3x.competition.F3XCompetition.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.hibernate.annotations.SqlFragmentAlias;
 
 import javax.persistence.*;
 

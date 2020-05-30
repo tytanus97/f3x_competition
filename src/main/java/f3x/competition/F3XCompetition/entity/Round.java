@@ -6,6 +6,7 @@ import f3x.competition.F3XCompetition.enumerate.RoundStatus;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,7 +21,7 @@ public class Round {
     @JsonProperty
     private Long round_id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="event_id")
     @JsonProperty
     private Event event;
@@ -41,7 +42,7 @@ public class Round {
     @JsonProperty
     private Timestamp roundFinishDate;
 
-    @OneToMany(mappedBy = "round")
+    @OneToMany(mappedBy = "round",fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REMOVE})
     @JsonProperty
     private List<Flight> roundFlights;
 
@@ -111,6 +112,19 @@ public class Round {
 
     public void setRoundFlights(List<Flight> roundFlights) {
         this.roundFlights = roundFlights;
+    }
+
+    public void addFlight(Flight flight) {
+        if(this.roundFlights == null) {
+            this.roundFlights = new ArrayList<>();
+        }
+        this.roundFlights.add(flight);
+    }
+
+    public void removeFlight(Flight flight) {
+        if(this.roundFlights != null && !this.roundFlights.isEmpty()) {
+            this.roundFlights.remove(flight);
+        }
     }
 
     @Override

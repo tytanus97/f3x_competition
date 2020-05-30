@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -38,9 +39,11 @@ public class Pilot {
     @JsonProperty
     private float pilotRating;
 
-    @OneToMany(mappedBy = "pilot")
-    @JsonProperty
+    @OneToMany(mappedBy = "pilot",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REMOVE})
     private List<Plane> pilotPlanes;
+
+    @ManyToMany(mappedBy = "pilotList",fetch = FetchType.LAZY)
+    private List<Event> pilotEvents;
 
     public Pilot() {
     }
@@ -101,6 +104,19 @@ public class Pilot {
         this.pilotRating = pilotRating;
     }
 
+    public void addEvent(Event event) {
+        if(this.pilotEvents == null) {
+            this.pilotEvents = new ArrayList<>();
+        }
+        this.pilotEvents.add(event);
+    }
+
+    public void removeEvent(Event event) {
+        if(this.pilotEvents != null && !this.pilotEvents.isEmpty()) {
+            this.pilotEvents.remove(event);
+        }
+    }
+
     @Override
     public String toString() {
         return "Pilot{" +
@@ -112,4 +128,6 @@ public class Pilot {
                 ", pilotRating=" + pilotRating +
                 '}';
     }
+
+
 }

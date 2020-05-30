@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -32,10 +33,14 @@ public class Event {
     @JsonProperty
     private Location location;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="pilot_event",joinColumns = {@JoinColumn(name="event_id")},
     inverseJoinColumns = {@JoinColumn(name="pilot_id")})
     private List<Pilot> pilotList;
+
+    @OneToMany(mappedBy = "event",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.REMOVE,CascadeType.PERSIST})
+    @JsonProperty
+    private List<Round> roundList;
 
     @ManyToOne
     @JoinColumn(name="competition_class_id")
@@ -50,14 +55,61 @@ public class Event {
     @JsonProperty
     private Timestamp endDate;
 
-
-    public Event(byte eventRoundCount, String eventName, Location location, CompetitionClass competitionClass, Timestamp startDate, Timestamp endDate) {
+    public Event(byte eventRoundCount, String eventName, Location location, List<Pilot> pilotList,
+                 List<Round> roundList, CompetitionClass competitionClass, Timestamp startDate, Timestamp endDate) {
         this.eventRoundCount = eventRoundCount;
         this.eventName = eventName;
         this.location = location;
+        this.pilotList = pilotList;
+        this.roundList = roundList;
         this.competitionClass = competitionClass;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public List<Round> getRoundList() {
+        return roundList;
+    }
+
+    public void setRoundList(List<Round> roundList) {
+        this.roundList = roundList;
+    }
+
+    public void addRound(Round round) {
+        if(this.roundList == null) {
+            this.roundList = new ArrayList<>();
+        }
+
+        this.roundList.add(round);
+    }
+
+    public void removeRound(Round round) {
+        if(this.roundList != null && !this.roundList.isEmpty()) {
+            this.roundList.remove(round);
+        }
+    }
+
+    public List<Pilot> getPilotList() {
+        return pilotList;
+    }
+
+    public void setPilotList(List<Pilot> pilotList) {
+        this.pilotList = pilotList;
+    }
+
+    public void addPilot(Pilot pilot) {
+        if(this.pilotList == null) {
+            this.pilotList = new ArrayList<>();
+        }
+        this.pilotList.add(pilot);
+        pilot.addEvent(this);
+    }
+
+    public void removePilot(Pilot pilot) {
+        if(this.pilotList != null && !this.pilotList.isEmpty()) {
+            this.pilotList.remove(pilot);
+            pilot.removeEvent(this);
+        }
     }
 
     public Long getEventId() {

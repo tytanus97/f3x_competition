@@ -11,8 +11,6 @@ import java.time.LocalTime;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Stats {
 
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "stats_id_generator")
     @SequenceGenerator(name="stats_id_generator",initialValue = 1,sequenceName = "stats_id_seq")
