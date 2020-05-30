@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.util.List;
 
 
 @Entity
@@ -30,6 +31,11 @@ public class Event {
     @JoinColumn(name="location_id")
     @JsonProperty
     private Location location;
+
+    @ManyToMany
+    @JoinTable(name="pilot_event",joinColumns = {@JoinColumn(name="event_id")},
+    inverseJoinColumns = {@JoinColumn(name="pilot_id")})
+    private List<Pilot> pilotList;
 
     @ManyToOne
     @JoinColumn(name="competition_class_id")

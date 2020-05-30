@@ -1,4 +1,0 @@
-2020-05-29 15:07:09 jdbc[3]: exception
-org.h2.jdbc.JdbcSQLSyntaxErrorException: Tabela "LOCATION" już istnieje
-Table "LOCATION" already exists; SQL statement:
-CREATE TABLE `location` ( `location_id` INT NOT NULL AUTO_INCREMENT, `location_name` VARCHAR(100) NOT NULL, `latitiude` VARCHAR(30) NULL, `longitude` VARCHAR(30) NULL, `location_type` ENUM('SLOPE', 'FLAT') NULL, `country_id` INT NOT NULL, PRIMARY KEY (`location_id`, `country_id`), FOREIGN KEY (`country_id`) REFERENCES `country` (`country_id`) ON DELETE NO ACTION ON UPDATE NO ACTION) [42101-200]
