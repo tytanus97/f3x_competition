@@ -1,5 +1,6 @@
 package f3x.competition.F3XCompetition.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -30,21 +31,24 @@ public class Event {
 
     @ManyToOne
     @JoinColumn(name="location_id")
-    @JsonProperty
+    @JsonIgnore
     private Location location;
 
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(name="pilot_event",joinColumns = {@JoinColumn(name="event_id")},
     inverseJoinColumns = {@JoinColumn(name="pilot_id")})
+    @JsonIgnore
     private List<Pilot> pilotList;
 
     @OneToMany(mappedBy = "event",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.REMOVE,CascadeType.PERSIST})
     @JsonProperty
+    @JsonIgnore
     private List<Round> roundList;
 
     @ManyToOne
     @JoinColumn(name="competition_class_id")
     @JsonProperty
+    @JsonIgnore
     private CompetitionClass competitionClass;
 
     @Column(name="start_date")

@@ -1,5 +1,6 @@
 package f3x.competition.F3XCompetition.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -19,17 +20,17 @@ public class Flight {
 
     @ManyToOne
     @JoinColumn(name="pilot_id")
-    @JsonProperty
+    @JsonIgnore
     private Pilot pilot;
 
     @ManyToOne
     @JoinColumn(name="event_id")
-    @JsonProperty
+    @JsonIgnore
     private Event event;
 
     @ManyToOne
     @JoinColumn(name="round_id")
-    @JsonProperty
+    @JsonIgnore
     private Round round;
 
     @OneToOne
