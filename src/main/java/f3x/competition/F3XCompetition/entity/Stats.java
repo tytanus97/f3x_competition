@@ -103,7 +103,6 @@ public class Stats {
     public String toString() {
         return "Stats{" +
                 "statsId=" + statsId +
-                ", flight=" + flight +
                 ", flightDuration=" + flightDuration +
                 ", laps=" + laps +
                 ", landing=" + landing +

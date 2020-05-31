@@ -79,14 +79,16 @@ public class Event {
         if(this.roundList == null) {
             this.roundList = new ArrayList<>();
         }
-
         this.roundList.add(round);
+        round.setEvent(this);
     }
 
     public void removeRound(Round round) {
         if(this.roundList != null && !this.roundList.isEmpty()) {
             this.roundList.remove(round);
+            round.setEvent(null);
         }
+
     }
 
     public List<Pilot> getPilotList() {

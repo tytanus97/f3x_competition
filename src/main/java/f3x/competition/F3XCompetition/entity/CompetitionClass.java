@@ -10,7 +10,6 @@ import javax.persistence.*;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CompetitionClass {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "competition_class_id_generator")
     @SequenceGenerator(name="competition_class_id_generator",initialValue = 1,sequenceName = "competition_class_id_seq")

@@ -48,13 +48,47 @@ public class Pilot {
     public Pilot() {
     }
 
-    public Pilot(String pilotFirstName, String pilotLastName, Country country, LocalDate pilotBirthDate, float pilotRating) {
+    public Pilot(String pilotFirstName, String pilotLastName, Country country, LocalDate pilotBirthDate,
+                 float pilotRating, List<Plane> pilotPlanes, List<Event> pilotEvents) {
         this.pilotFirstName = pilotFirstName;
         this.pilotLastName = pilotLastName;
         this.country = country;
         this.pilotBirthDate = pilotBirthDate;
         this.pilotRating = pilotRating;
+        this.pilotPlanes = pilotPlanes;
+        this.pilotEvents = pilotEvents;
     }
+
+
+    public List<Plane> getPilotPlanes() {
+        return pilotPlanes;
+    }
+
+    public void setPilotPlanes(List<Plane> pilotPlanes) {
+        this.pilotPlanes = pilotPlanes;
+    }
+
+    public void addPlane(Plane plane) {
+        if(this.pilotPlanes == null) {
+            this.pilotPlanes = new ArrayList<>();
+        }
+        this.pilotPlanes.add(plane);
+        plane.setPilot(this);
+    }
+
+    public void removePlane(Plane plane) {
+        if(this.pilotPlanes != null && !this.pilotPlanes.isEmpty()) {
+            this.pilotPlanes.remove(plane);
+            plane.setPilot(null);
+        }
+    }
+    public List<Event> getPilotEvents() {
+        return pilotEvents;
+    }
+    public void setPilotEvents(List<Event> pilotEvents) {
+        this.pilotEvents = pilotEvents;
+    }
+
 
     public Long getPilotId() {
         return pilotId;
@@ -123,7 +157,6 @@ public class Pilot {
                 "pilotId=" + pilotId +
                 ", pilotFirstName='" + pilotFirstName + '\'' +
                 ", pilotLastName='" + pilotLastName + '\'' +
-                ", country=" + country +
                 ", pilotBirthDate=" + pilotBirthDate +
                 ", pilotRating=" + pilotRating +
                 '}';

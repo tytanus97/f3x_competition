@@ -91,7 +91,6 @@ public class Plane {
                 ", planeWingSpan=" + planeWingSpan +
                 ", planeColor='" + planeColor + '\'' +
                 ", planeName='" + planeName + '\'' +
-                ", pilot=" + pilot +
                 '}';
     }
 }

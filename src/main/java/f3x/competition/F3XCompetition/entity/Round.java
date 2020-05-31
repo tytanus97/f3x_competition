@@ -119,11 +119,13 @@ public class Round {
             this.roundFlights = new ArrayList<>();
         }
         this.roundFlights.add(flight);
+        flight.setRound(this);
     }
 
     public void removeFlight(Flight flight) {
         if(this.roundFlights != null && !this.roundFlights.isEmpty()) {
             this.roundFlights.remove(flight);
+            flight.setRound(null);
         }
     }
 
@@ -131,12 +133,10 @@ public class Round {
     public String toString() {
         return "Round{" +
                 "round_id=" + round_id +
-                ", event=" + event +
                 ", roundNumber=" + roundNumber +
                 ", roundStatus=" + roundStatus +
                 ", roundBeginDate=" + roundBeginDate +
                 ", roundFinishDate=" + roundFinishDate +
-                ", roundFlights=" + roundFlights +
                 '}';
     }
 }

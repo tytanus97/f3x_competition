@@ -105,11 +105,7 @@ public class Flight {
     public String toString() {
         return "Flight{" +
                 "flightId=" + flightId +
-                ", pilot=" + pilot +
-                ", event=" + event +
-                ", round=" + round +
                 ", competitionClass=" + competitionClass +
-                ", stats=" + stats +
                 '}';
     }
 }

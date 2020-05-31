@@ -63,7 +63,6 @@ public class Task {
         return "Task{" +
                 "taskId=" + taskId +
                 ", taskName='" + taskName + '\'' +
-                ", competitionClass=" + competitionClass +
                 '}';
     }
 }

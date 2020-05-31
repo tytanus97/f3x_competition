@@ -105,7 +105,6 @@ public class Location {
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", locationType=" + locationType +
-                ", country=" + country +
                 '}';
     }
 }
