@@ -1,22 +1,18 @@
 package f3x.competition.F3XCompetition;
 
-import f3x.competition.F3XCompetition.entity.Country;
-import f3x.competition.F3XCompetition.entity.Location;
 import f3x.competition.F3XCompetition.repository.CountryRepository;
-import f3x.competition.F3XCompetition.repository.TestRepositoryLocation;
+import f3x.competition.F3XCompetition.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
-
-import java.util.Optional;
 
 @SpringBootApplication
 @EnableSwagger2
 public class F3XCompetitionApplication {
 
 	@Autowired
-	private static TestRepositoryLocation testRepositoryLocation;
+	private static LocationRepository locationRepository;
 
 	@Autowired
 	private static CountryRepository countryRepository;

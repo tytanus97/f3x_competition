@@ -3,7 +3,7 @@ package f3x.competition.F3XCompetition.controller;
 import f3x.competition.F3XCompetition.entity.Country;
 import f3x.competition.F3XCompetition.entity.Location;
 import f3x.competition.F3XCompetition.repository.CountryRepository;
-import f3x.competition.F3XCompetition.repository.TestRepositoryLocation;
+import f3x.competition.F3XCompetition.repository.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,7 +16,7 @@ public class TestController {
     private CountryRepository countryRepository;
 
     @Autowired
-    private TestRepositoryLocation testRepositoryLocation;
+    private LocationRepository locationRepository;
 
     @PostMapping("/api/countries")
     public void addCountry(@RequestBody Country country) {
@@ -36,17 +36,17 @@ public class TestController {
     public void addLocation(@RequestBody Location location) {
 
         location.setCountry(countryRepository.findByCountryId((long)1).get());
-        testRepositoryLocation.save(location);
+        locationRepository.save(location);
     }
 
     @GetMapping("/api/location/{locationId}")
     public Optional<Location> getLocationById(@PathVariable Long locationId) {
-        return testRepositoryLocation.findById(locationId);
+        return locationRepository.findById(locationId);
     }
 
     @GetMapping("/api/location/{locationId}/country")
     public Country getLocationCountry(@PathVariable Long locationId) {
-        return testRepositoryLocation.findById(locationId).get().getCountry();
+        return locationRepository.findById(locationId).get().getCountry();
     }
 
 
