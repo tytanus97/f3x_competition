@@ -14,5 +14,4 @@ public interface PilotService {
     void removePlaneFromPilot(Pilot pilot,Plane plane);
     void delete(Pilot pilot);
 
-
 }
