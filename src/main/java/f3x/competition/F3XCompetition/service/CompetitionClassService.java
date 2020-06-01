@@ -1,5 +1,11 @@
 package f3x.competition.F3XCompetition.service;
 
-public interface CompetitionClassService {
+import f3x.competition.F3XCompetition.entity.CompetitionClass;
 
+import java.util.List;
+
+public interface CompetitionClassService {
+        List<CompetitionClass> getAll();
+        void addCompetitionClass(CompetitionClass competitionClass);
+        void removeCompetitionClass(CompetitionClass competitionClass);
 }
