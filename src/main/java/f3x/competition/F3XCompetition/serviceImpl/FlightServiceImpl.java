@@ -1,4 +1,8 @@
 package f3x.competition.F3XCompetition.serviceImpl;
 
-public class FlightServiceImpl {
+import f3x.competition.F3XCompetition.service.FlightService;
+import org.springframework.stereotype.Service;
+
+@Service
+public class FlightServiceImpl implements FlightService {
 }

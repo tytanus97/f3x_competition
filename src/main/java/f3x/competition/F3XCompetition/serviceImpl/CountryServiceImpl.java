@@ -1,4 +1,8 @@
 package f3x.competition.F3XCompetition.serviceImpl;
 
-public class CountryServiceImpl {
+import f3x.competition.F3XCompetition.service.CountryService;
+import org.springframework.stereotype.Service;
+
+@Service
+public class CountryServiceImpl implements CountryService {
 }

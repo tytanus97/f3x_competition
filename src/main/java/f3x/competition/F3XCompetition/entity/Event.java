@@ -41,13 +41,11 @@ public class Event {
     private List<Pilot> pilotList;
 
     @OneToMany(mappedBy = "event",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.REMOVE,CascadeType.PERSIST})
-    @JsonProperty
     @JsonIgnore
     private List<Round> roundList;
 
     @ManyToOne
     @JoinColumn(name="competition_class_id")
-    @JsonProperty
     @JsonIgnore
     private CompetitionClass competitionClass;
 

@@ -1,4 +1,8 @@
 package f3x.competition.F3XCompetition.serviceImpl;
 
-public class RoundServiceImpl {
+import f3x.competition.F3XCompetition.service.RoundService;
+import org.springframework.stereotype.Service;
+
+@Service
+public class RoundServiceImpl  implements RoundService {
 }
