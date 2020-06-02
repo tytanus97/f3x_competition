@@ -15,12 +15,10 @@ public class StatsServiceImpl implements StatsService {
 
     private final StatsRepository statsRepository;
 
-
     @Autowired
     public StatsServiceImpl(StatsRepository statsRepository) {
         this.statsRepository = statsRepository;
     }
-
 
     @Override
     @Transactional
