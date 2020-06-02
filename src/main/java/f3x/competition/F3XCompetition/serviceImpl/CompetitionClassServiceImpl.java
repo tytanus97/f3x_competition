@@ -27,7 +27,7 @@ public class CompetitionClassServiceImpl implements CompetitionClassService {
 
     @Override
     @Transactional
-    public void addCompetitionClass(CompetitionClass competitionClass) {
+    public void saveCompetitionClass(CompetitionClass competitionClass) {
         this.competitionClassRepository.save(competitionClass);
     }
 

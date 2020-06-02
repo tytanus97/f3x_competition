@@ -52,6 +52,18 @@ public class RoundServiceImpl  implements RoundService {
 
     @Override
     @Transactional
+    public void saveRound(Round round) {
+        this.roundRepository.save(round);
+    }
+
+    @Override
+    @Transactional
+    public void removeRound(Round round) {
+        this.roundRepository.delete(round);
+    }
+
+    @Override
+    @Transactional
     public void removeFlightFromRound(Round round, Flight flight) {
             round.removeFlight(flight);
         this.roundRepository.save(round);

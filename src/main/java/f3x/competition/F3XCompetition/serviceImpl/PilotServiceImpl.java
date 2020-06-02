@@ -3,8 +3,8 @@ package f3x.competition.F3XCompetition.serviceImpl;
 import f3x.competition.F3XCompetition.entity.Pilot;
 import f3x.competition.F3XCompetition.entity.Plane;
 import f3x.competition.F3XCompetition.repository.PilotRepository;
-import f3x.competition.F3XCompetition.repository.PlaneRepository;
 import f3x.competition.F3XCompetition.service.PilotService;
+import f3x.competition.F3XCompetition.service.PlaneService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,13 +16,13 @@ import java.util.Optional;
 public class PilotServiceImpl implements PilotService {
 
     private final PilotRepository pilotRepository;
-    private final PlaneRepository planeRepository;
+    private final PlaneService planeService;
 
 
     @Autowired
-    public PilotServiceImpl(PilotRepository pilotRepository, PlaneRepository planeRepository) {
+    public PilotServiceImpl(PilotRepository pilotRepository, PlaneService planeService) {
         this.pilotRepository = pilotRepository;
-        this.planeRepository = planeRepository;
+        this.planeService = planeService;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class PilotServiceImpl implements PilotService {
 
     @Override
     @Transactional
-    public void addPilot(Pilot pilot) {
+    public void savePilot(Pilot pilot) {
             this.pilotRepository.save(pilot);
     }
 
@@ -48,7 +48,7 @@ public class PilotServiceImpl implements PilotService {
     public void addPlaneToPilot(Pilot pilot, Plane plane) {
             pilot.addPlane(plane);
             this.pilotRepository.save(pilot);
-            this.planeRepository.save(plane);
+            this.planeService.savePlane(plane);
     }
 
     @Override
@@ -56,7 +56,7 @@ public class PilotServiceImpl implements PilotService {
     public void removePlaneFromPilot(Pilot pilot, Plane plane) {
             pilot.removePlane(plane);
             this.pilotRepository.save(pilot);
-            this.planeRepository.delete(plane);
+            this.planeService.delete(plane);
     }
 
     @Override

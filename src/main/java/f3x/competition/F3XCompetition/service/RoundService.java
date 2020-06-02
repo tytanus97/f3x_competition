@@ -9,8 +9,9 @@ import java.util.Optional;
 public interface RoundService {
     List<Round> getAll();
     Optional<Round> getById(Long id);
+    void saveRound(Round round);
     List<Flight> getRoundFlights(Round round);
     void addFlightToRound(Round round,Flight flight);
     void removeFlightFromRound(Round round,Flight flight);
-
+    void removeRound(Round round);
 }

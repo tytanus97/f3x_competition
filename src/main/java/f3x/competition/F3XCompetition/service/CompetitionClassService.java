@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface CompetitionClassService {
         List<CompetitionClass> getAll();
-        void addCompetitionClass(CompetitionClass competitionClass);
+        void saveCompetitionClass(CompetitionClass competitionClass);
         void removeCompetitionClass(CompetitionClass competitionClass);
 }

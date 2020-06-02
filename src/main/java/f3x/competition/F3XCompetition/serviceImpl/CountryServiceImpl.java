@@ -34,7 +34,7 @@ public class CountryServiceImpl implements CountryService {
 
     @Override
     @Transactional
-    public void addCountry(Country country) {
+    public void saveCountry(Country country) {
             this.countryRepository.save(country);
     }
 
