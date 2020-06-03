@@ -109,13 +109,11 @@ public class Event {
             this.pilotList = new ArrayList<>();
         }
         this.pilotList.add(pilot);
-        pilot.addEvent(this);
     }
 
     public void removePilot(Pilot pilot) {
         if(this.pilotList != null && !this.pilotList.isEmpty()) {
             this.pilotList.remove(pilot);
-            pilot.removeEvent(this);
         }
     }
 

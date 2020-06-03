@@ -1,5 +1,6 @@
 package f3x.competition.F3XCompetition.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import f3x.competition.F3XCompetition.enumerate.RoundStatus;
@@ -23,7 +24,7 @@ public class Round {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="event_id")
-    @JsonProperty
+    @JsonIgnore
     private Event event;
 
     @Column(name="round_number")
@@ -36,14 +37,14 @@ public class Round {
 
     @Column(name="round_begin_date")
     @JsonProperty
-    private Timestamp roundBeginDate;
+    private Timestamp roundBeginDate =  new Timestamp(System.currentTimeMillis());
 
     @Column(name="round_finish_date")
     @JsonProperty
-    private Timestamp roundFinishDate;
+    private Timestamp roundFinishDate  = new Timestamp(System.currentTimeMillis()+3600000);
 
     @OneToMany(mappedBy = "round",fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REMOVE})
-    @JsonProperty
+    @JsonIgnore
     private List<Flight> roundFlights;
 
     public Round() {
