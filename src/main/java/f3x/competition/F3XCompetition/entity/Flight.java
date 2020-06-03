@@ -33,10 +33,6 @@ public class Flight {
     @JsonIgnore
     private Round round;
 
-    @OneToOne
-    @JoinColumn(name="competition_class_id")
-    @JsonProperty
-    private CompetitionClass competitionClass;
 
     @OneToOne
     @JoinColumn(name="stats_id")
@@ -46,11 +42,10 @@ public class Flight {
     public Flight() {
     }
 
-    public Flight(Pilot pilot, Event event, Round round, CompetitionClass competitionClass, Stats stats) {
+    public Flight(Pilot pilot, Event event, Round round, Stats stats) {
         this.pilot = pilot;
         this.event = event;
         this.round = round;
-        this.competitionClass = competitionClass;
         this.stats = stats;
     }
 
@@ -86,13 +81,6 @@ public class Flight {
         this.round = round;
     }
 
-    public CompetitionClass getCompetitionClass() {
-        return competitionClass;
-    }
-
-    public void setCompetitionClass(CompetitionClass competitionClass) {
-        this.competitionClass = competitionClass;
-    }
 
     public Stats getStats() {
         return stats;
@@ -102,11 +90,4 @@ public class Flight {
         this.stats = stats;
     }
 
-    @Override
-    public String toString() {
-        return "Flight{" +
-                "flightId=" + flightId +
-                ", competitionClass=" + competitionClass +
-                '}';
-    }
 }

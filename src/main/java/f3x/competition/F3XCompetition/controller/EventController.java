@@ -5,6 +5,7 @@ import f3x.competition.F3XCompetition.entity.Flight;
 import f3x.competition.F3XCompetition.entity.Pilot;
 import f3x.competition.F3XCompetition.entity.Round;
 import f3x.competition.F3XCompetition.service.EventService;
+import f3x.competition.F3XCompetition.service.FlightService;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.RoundService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,12 +21,14 @@ public class EventController {
     private final EventService eventService;
     private final RoundService roundService;
     private final PilotService pilotService;
+    private final FlightService flightService;
 
     @Autowired
-    public EventController(EventService eventService, RoundService roundService, PilotService pilotService) {
+    public EventController(EventService eventService, RoundService roundService, PilotService pilotService, FlightService flightService) {
         this.eventService = eventService;
         this.roundService = roundService;
         this.pilotService = pilotService;
+        this.flightService = flightService;
     }
 
     @GetMapping("/")
@@ -49,13 +52,22 @@ public class EventController {
         Optional<Event> tmpEvent = this.eventService.getById(eventId);
         return tmpEvent.map(Event::getPilotList).orElse(null);
     }
+
+    @GetMapping("/{eventId}/pilots/{pilotId}/rounds")
+    public List<Flight> getPilotRoundFlights(@PathVariable Long eventId,@PathVariable Long pilotId) {
+        return this.flightService.getByEventAndPilot(eventId,pilotId);
+    }
+
+    @GetMapping("/{eventId}/pilots/{pilotId}/rounds/{roundId}")
+    public List<Flight> getPilotRoundFlights(@PathVariable Long eventId,@PathVariable Long pilotId,@PathVariable Long roundId) {
+        return this.flightService.getByEventAndPilotAndRound(eventId,pilotId,roundId);
+    }
+
     @GetMapping("/{eventId}/rounds/{roundId}/flights")
     public List<Flight> getEventRoundFlights(@PathVariable Long eventId,@PathVariable Long roundId) {
         Optional<Round> tmpRound = this.roundService.getById(roundId);
         return tmpRound.map(Round::getRoundFlights).orElse(null);
     }
-
-
 
     @PostMapping("/")
     public void addEvent(@RequestBody Event event) {
@@ -79,8 +91,15 @@ public class EventController {
     public void addRoundToEvent(@RequestBody Round round,@PathVariable Long eventId) {
         Optional<Event> tmpEvent = this.eventService.getById(eventId);
         tmpEvent.ifPresent(event-> {
-            round.setEvent(event);
-            this.roundService.saveRound(round);
+            int eventRoundCount = event.getRoundList().size();
+            if(eventRoundCount < event.getEventRoundCount()) {
+                round.setRoundNumber((short)(eventRoundCount+1));
+                round.setEvent(event);
+                this.roundService.saveRound(round);
+            }
+            else {
+                //send error response.. for now it's empty
+            }
         });
     }
 

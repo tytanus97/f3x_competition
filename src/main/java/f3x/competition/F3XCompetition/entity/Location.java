@@ -3,7 +3,6 @@ package f3x.competition.F3XCompetition.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import f3x.competition.F3XCompetition.enumerate.LocationType;
 
 import javax.persistence.*;
 
@@ -31,10 +30,6 @@ public class Location {
     @JsonProperty
     private String longitude;
 
-    @Column(name="location_type")
-    @JsonProperty
-    private LocationType locationType;
-
     @ManyToOne
     @JoinColumn(name = "country_id")
     @JsonIgnore
@@ -43,11 +38,11 @@ public class Location {
     public Location() {
     }
 
-    public Location(String locationName, String latitude, String longitude, LocationType locationType, Country country) {
+    public Location(String locationName, String latitude, String longitude, Country country) {
         this.locationName = locationName;
         this.latitude = latitude;
         this.longitude = longitude;
-        this.locationType = locationType;
+
         this.country = country;
     }
 
@@ -83,13 +78,6 @@ public class Location {
         this.longitude = longitude;
     }
 
-    public LocationType getLocationType() {
-        return locationType;
-    }
-
-    public void setLocationType(LocationType locationType) {
-        this.locationType = locationType;
-    }
 
     public Country getCountry() {
         return country;
@@ -106,7 +94,6 @@ public class Location {
                 ", locationName='" + locationName + '\'' +
                 ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
-                ", locationType=" + locationType +
                 '}';
     }
 }

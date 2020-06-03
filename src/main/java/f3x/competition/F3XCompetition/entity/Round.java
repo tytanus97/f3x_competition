@@ -35,13 +35,13 @@ public class Round {
     @JsonProperty
     private RoundStatus roundStatus;
 
-    @Column(name="round_begin_date")
+   /* @Column(name="round_begin_date")
     @JsonProperty
     private Timestamp roundBeginDate =  new Timestamp(System.currentTimeMillis());
 
     @Column(name="round_finish_date")
     @JsonProperty
-    private Timestamp roundFinishDate  = new Timestamp(System.currentTimeMillis()+3600000);
+    private Timestamp roundFinishDate  = new Timestamp(System.currentTimeMillis()+3600000);*/
 
     @OneToMany(mappedBy = "round",fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REMOVE})
     @JsonIgnore
@@ -50,12 +50,19 @@ public class Round {
     public Round() {
     }
 
-    public Round(Event event, short roundNumber, RoundStatus roundStatus, Timestamp roundBeginDate, Timestamp roundFinishDate, List<Flight> roundFlights) {
+    /*public Round(Event event, short roundNumber, RoundStatus roundStatus, Timestamp roundBeginDate, Timestamp roundFinishDate, List<Flight> roundFlights) {
         this.event = event;
         this.roundNumber = roundNumber;
         this.roundStatus = roundStatus;
         this.roundBeginDate = roundBeginDate;
         this.roundFinishDate = roundFinishDate;
+        this.roundFlights = roundFlights;
+    }*/
+
+    public Round(Event event, short roundNumber, RoundStatus roundStatus, List<Flight> roundFlights) {
+        this.event = event;
+        this.roundNumber = roundNumber;
+        this.roundStatus = roundStatus;
         this.roundFlights = roundFlights;
     }
 
@@ -90,7 +97,7 @@ public class Round {
     public void setRoundStatus(RoundStatus roundStatus) {
         this.roundStatus = roundStatus;
     }
-
+/*
     public Timestamp getRoundBeginDate() {
         return roundBeginDate;
     }
@@ -105,7 +112,7 @@ public class Round {
 
     public void setRoundFinishDate(Timestamp roundFinishDate) {
         this.roundFinishDate = roundFinishDate;
-    }
+    }*/
 
     public List<Flight> getRoundFlights() {
         return roundFlights;
@@ -136,8 +143,8 @@ public class Round {
                 "round_id=" + round_id +
                 ", roundNumber=" + roundNumber +
                 ", roundStatus=" + roundStatus +
-                ", roundBeginDate=" + roundBeginDate +
-                ", roundFinishDate=" + roundFinishDate +
+              /*  ", roundBeginDate=" + roundBeginDate +
+                ", roundFinishDate=" + roundFinishDate +*/
                 '}';
     }
 }

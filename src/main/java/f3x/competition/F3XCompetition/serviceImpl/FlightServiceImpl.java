@@ -1,6 +1,9 @@
 package f3x.competition.F3XCompetition.serviceImpl;
 
+import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Flight;
+import f3x.competition.F3XCompetition.entity.Pilot;
+import f3x.competition.F3XCompetition.entity.Round;
 import f3x.competition.F3XCompetition.repository.FlightRepository;
 import f3x.competition.F3XCompetition.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +37,18 @@ public class FlightServiceImpl implements FlightService {
 
     @Override
     @Transactional
+    public List<Flight> getByEventAndPilot(Event event, Pilot pilot) {
+        return this.flightRepository.findAllByEventAndPilot(event,pilot);
+    }
+
+    @Override
+    @Transactional
+    public List<Flight> getByEventAndPilot(Long eventId, Long pilotId) {
+        return this.flightRepository.findAllByEvent_EventIdAndPilot_PilotId(eventId,pilotId);
+    }
+
+    @Override
+    @Transactional
     public void saveFlight(Flight flight) {
         this.flightRepository.save(flight);
     }
@@ -42,5 +57,10 @@ public class FlightServiceImpl implements FlightService {
     @Transactional
     public void deleteFlight(Flight flight) {
         this.flightRepository.delete(flight);
+    }
+
+    @Override
+    public List<Flight> getByEventAndPilotAndRound(Long eventId, Long pilotId, Long roundId) {
+        return this.flightRepository.findAllByEvent_EventIdAndPilot_PilotIdAndRound_Round_id(eventId,pilotId,roundId);
     }
 }
