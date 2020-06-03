@@ -49,13 +49,29 @@ public class PilotController {
 
     @GetMapping("/{pilotId}/planes/{planeId}")
     public Plane getPilotPlane(@PathVariable Long pilotId,@PathVariable Long planeId) {
-        return this.planeService.
-
+        Optional<Plane> tmpPlane = this.planeService.getById(planeId);
+        return tmpPlane.orElse(null);
     }
 
+    @PutMapping("/{pilotId}")
+    public void updatePilot(@RequestBody Pilot updatedPilot,@PathVariable Long pilotId) {
+        this.pilotService.savePilot(updatedPilot);
+    }
     @PostMapping("/")
     public void savePilot(@RequestBody Pilot pilot) {
         this.pilotService.savePilot(pilot);
+    }
+
+    @PostMapping("/{pilotId}/planes")
+    public void addPilotPlane(@PathVariable Long pilotId,@RequestBody Plane plane) {
+        Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
+        tmpPilot.ifPresent(plane::setPilot);
+        this.planeService.savePlane(plane);
+    }
+
+    @DeleteMapping("/{pilotId}/planes/{planeId}")
+    public void deletePlane(@PathVariable Long pilotId,@PathVariable Long planeId) {
+        this.planeService.deleteById(planeId);
     }
 
     @DeleteMapping("/{pilotId}")
@@ -63,7 +79,5 @@ public class PilotController {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
         tmpPilot.ifPresent(this.pilotService::delete);
     }
-
-
 
 }

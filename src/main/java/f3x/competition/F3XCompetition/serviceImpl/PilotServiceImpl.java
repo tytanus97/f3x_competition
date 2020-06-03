@@ -46,9 +46,10 @@ public class PilotServiceImpl implements PilotService {
     @Override
     @Transactional
     public void addPlaneToPilot(Pilot pilot, Plane plane) {
+            this.planeService.savePlane(plane);
             pilot.addPlane(plane);
             this.pilotRepository.save(pilot);
-            this.planeService.savePlane(plane);
+
     }
 
     @Override

@@ -1,5 +1,6 @@
 package f3x.competition.F3XCompetition.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -31,7 +32,7 @@ public class Plane {
 
     @ManyToOne
     @JoinColumn(name="pilot_id")
-    @JsonProperty
+    @JsonIgnore
     private Pilot pilot;
 
     public Plane() {

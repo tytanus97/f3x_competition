@@ -1,5 +1,6 @@
 package f3x.competition.F3XCompetition.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -29,6 +30,7 @@ public class Pilot {
 
     @ManyToOne
     @JoinColumn(name = "country_id")
+    @JsonIgnore
     private Country country;
 
     @Column(name="pilot_birth_date")
@@ -40,9 +42,11 @@ public class Pilot {
     private float pilotRating;
 
     @OneToMany(mappedBy = "pilot",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REMOVE})
+    @JsonIgnore
     private List<Plane> pilotPlanes;
 
     @ManyToMany(mappedBy = "pilotList",fetch = FetchType.LAZY)
+    @JsonIgnore
     private List<Event> pilotEvents;
 
     public Pilot() {

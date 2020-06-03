@@ -50,12 +50,15 @@ public class Event {
     private CompetitionClass competitionClass;
 
     @Column(name="start_date")
-    @JsonProperty
-    private Timestamp startDate;
+    @JsonIgnore
+    private Timestamp startDate = new Timestamp(System.currentTimeMillis());
 
     @Column(name="end_date")
-    @JsonProperty
-    private Timestamp endDate;
+    @JsonIgnore
+    private Timestamp endDate = new Timestamp(System.currentTimeMillis()+36000);
+
+    public Event() {
+    }
 
     public Event(byte eventRoundCount, String eventName, Location location, List<Pilot> pilotList,
                  List<Round> roundList, CompetitionClass competitionClass, Timestamp startDate, Timestamp endDate) {
