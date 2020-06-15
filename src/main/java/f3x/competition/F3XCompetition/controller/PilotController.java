@@ -1,5 +1,6 @@
 package f3x.competition.F3XCompetition.controller;
 
+import f3x.competition.F3XCompetition.entity.Country;
 import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Pilot;
 import f3x.competition.F3XCompetition.entity.Plane;
@@ -33,6 +34,11 @@ public class PilotController {
     @GetMapping("/{pilotId}")
     public Optional<Pilot> getById(@PathVariable Long pilotId) {
         return this.pilotService.getById(pilotId);
+    }
+
+    @GetMapping("/{pilotId}/country")
+    public Optional<Country> getPilotCountry(@PathVariable Long pilotId) {
+        return this.pilotService.getById(pilotId).map(Pilot::getCountry);
     }
 
     @GetMapping("/{pilotId}/events")

@@ -1,7 +1,10 @@
 package f3x.competition.F3XCompetition.controller;
 
+import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Flight;
+import f3x.competition.F3XCompetition.repository.EventRepository;
 import f3x.competition.F3XCompetition.repository.FlightRepository;
+import f3x.competition.F3XCompetition.repository.RoundRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -15,8 +18,9 @@ public class FlightController {
     private final FlightRepository flightRepository;
 
     @Autowired
-    public FlightController(FlightRepository flightRepository) {
+    public FlightController(FlightRepository flightRepository, EventRepository eventRepository, RoundRepository roundRepository) {
         this.flightRepository = flightRepository;
+
     }
 
     @GetMapping("/")
@@ -29,7 +33,4 @@ public class FlightController {
         return this.flightRepository.findById(flightId);
     }
 
-    public void addFlight(@RequestBody Flight flight) {
-        this.flightRepository.save(flight);
-    }
 }

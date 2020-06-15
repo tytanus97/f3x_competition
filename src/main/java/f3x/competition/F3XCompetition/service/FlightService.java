@@ -15,5 +15,6 @@ public interface FlightService {
     List<Flight> getByEventAndPilot(Long eventId, Long pilotId);
     void saveFlight(Flight flight);
     void deleteFlight(Flight flight);
+    void deleteFlightByFlightId(Long flightId);
     List<Flight> getByEventAndPilotAndRound(Long eventId, Long pilotId, Long roundId);
 }

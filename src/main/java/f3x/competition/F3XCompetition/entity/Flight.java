@@ -34,7 +34,7 @@ public class Flight {
     private Round round;
 
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
     @JoinColumn(name="stats_id")
     @JsonProperty
     private Stats stats;

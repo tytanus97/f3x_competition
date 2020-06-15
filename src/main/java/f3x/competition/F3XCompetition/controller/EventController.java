@@ -1,9 +1,6 @@
 package f3x.competition.F3XCompetition.controller;
 
-import f3x.competition.F3XCompetition.entity.Event;
-import f3x.competition.F3XCompetition.entity.Flight;
-import f3x.competition.F3XCompetition.entity.Pilot;
-import f3x.competition.F3XCompetition.entity.Round;
+import f3x.competition.F3XCompetition.entity.*;
 import f3x.competition.F3XCompetition.service.EventService;
 import f3x.competition.F3XCompetition.service.FlightService;
 import f3x.competition.F3XCompetition.service.PilotService;
@@ -103,6 +100,27 @@ public class EventController {
         });
     }
 
+    @PostMapping("/{eventId}/rounds/{roundId}/pilots/{pilotId}/flights")
+    public void addFlightsToRound(@RequestBody Stats stats, @PathVariable Long pilotId,
+                                  @PathVariable Long eventId,@PathVariable Long roundId) {
+        Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
+        Optional<Event> tmpEvent = this.eventService.getById(eventId);
+        Optional<Round> tmpRound = this.roundService.getById(roundId);
+
+        tmpEvent.ifPresent( event -> {
+            tmpRound.ifPresent(round-> {
+            tmpPilot.ifPresent(pilot -> {
+                Flight flight = new Flight();
+                flight.setPilot(pilot);
+                flight.setStats(stats);
+                flight.setEvent(event);
+                flight.setRound(round);
+                this.flightService.saveFlight(flight);
+            });
+        });
+        });
+    }
+
     @DeleteMapping("/{eventId}/rounds/{roundId}")
     public void deleteRoundFromEvent(@PathVariable Long eventId,@PathVariable Long roundId) {
 
@@ -128,5 +146,9 @@ public class EventController {
                 this.pilotService.savePilot(pilot);
                 });
         });
+    }
+    @DeleteMapping("/{flightId}")
+    public void deleteFlightFromRound(@PathVariable Long flightId) {
+            this.flightService.deleteFlightByFlightId(flightId);
     }
 }

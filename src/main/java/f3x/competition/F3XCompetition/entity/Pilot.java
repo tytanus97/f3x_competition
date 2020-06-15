@@ -28,9 +28,9 @@ public class Pilot {
     @JsonProperty
     private String pilotLastName;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "country_id")
-    @JsonIgnore
+    @JsonProperty(defaultValue = "")
     private Country country;
 
     @Column(name="pilot_birth_date")
@@ -38,7 +38,7 @@ public class Pilot {
     private LocalDate pilotBirthDate;
 
     @Column(name="pilot_rating")
-    @JsonProperty
+    @JsonProperty(defaultValue = "0")
     private float pilotRating;
 
     @OneToMany(mappedBy = "pilot",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REMOVE})

@@ -12,6 +12,7 @@ import java.util.List;
 public interface FlightRepository extends JpaRepository<Flight,Long> {
 
     List<Flight> findAllByEventAndPilot(Event event, Pilot pilot);
+    void deleteFlightByFlightId(Long flightId);
     List<Flight> findAllByEvent_EventIdAndPilot_PilotId(Long eventId,Long pilotId);
-    List<Flight> findAllByEvent_EventIdAndPilot_PilotIdAndRound_Round_id(Long eventId,Long pilotId,Long roundId);
+    List<Flight> findAllByEvent_EventIdAndPilot_PilotIdAndRound_RoundId(Long eventId,Long pilotId,Long roundId);
 }

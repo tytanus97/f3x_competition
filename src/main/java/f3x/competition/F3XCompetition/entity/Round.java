@@ -6,7 +6,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import f3x.competition.F3XCompetition.enumerate.RoundStatus;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class Round {
     @SequenceGenerator(name="round_id_generator",initialValue = 1,sequenceName = "round_id_seq")
     @Column(name="round_id")
     @JsonProperty
-    private Long round_id;
+    private Long roundId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="event_id")
@@ -66,12 +65,12 @@ public class Round {
         this.roundFlights = roundFlights;
     }
 
-    public Long getRound_id() {
-        return round_id;
+    public Long getRoundId() {
+        return roundId;
     }
 
-    public void setRound_id(Long round_id) {
-        this.round_id = round_id;
+    public void setRoundId(Long roundId) {
+        this.roundId = roundId;
     }
 
     public Event getEvent() {
@@ -140,7 +139,7 @@ public class Round {
     @Override
     public String toString() {
         return "Round{" +
-                "round_id=" + round_id +
+                "round_id=" + roundId +
                 ", roundNumber=" + roundNumber +
                 ", roundStatus=" + roundStatus +
               /*  ", roundBeginDate=" + roundBeginDate +

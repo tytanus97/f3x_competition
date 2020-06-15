@@ -18,8 +18,7 @@ public class Stats {
     @JsonProperty
     private Long statsId;
 
-    @OneToOne
-    @JoinColumn(name="flight_id")
+    @OneToOne(mappedBy = "stats")
     @JsonProperty
     private Flight flight;
 
