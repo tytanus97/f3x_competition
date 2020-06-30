@@ -37,6 +37,10 @@ public class Pilot {
     @JsonProperty
     private LocalDate pilotBirthDate;
 
+    @Column(name="pilot_email")
+    @JsonProperty
+    private String pilotEmail;
+
     @Column(name="pilot_rating")
     @JsonProperty(defaultValue = "0")
     private float pilotRating;
@@ -45,7 +49,7 @@ public class Pilot {
     @JsonIgnore
     private List<Plane> pilotPlanes;
 
-    @ManyToMany(mappedBy = "pilotList",fetch = FetchType.LAZY)
+    @ManyToMany(mappedBy = "pilotList",fetch = FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
     @JsonIgnore
     private List<Event> pilotEvents;
 
@@ -155,16 +159,24 @@ public class Pilot {
         }
     }
 
+    public String getPilotEmail() {
+        return pilotEmail;
+    }
+
+    public void setPilotEmail(String pilotEmail) {
+        this.pilotEmail = pilotEmail;
+    }
+
     @Override
     public String toString() {
         return "Pilot{" +
                 "pilotId=" + pilotId +
                 ", pilotFirstName='" + pilotFirstName + '\'' +
                 ", pilotLastName='" + pilotLastName + '\'' +
+                ", country=" + country +
                 ", pilotBirthDate=" + pilotBirthDate +
+                ", pilotEmail='" + pilotEmail + '\'' +
                 ", pilotRating=" + pilotRating +
                 '}';
     }
-
-
 }

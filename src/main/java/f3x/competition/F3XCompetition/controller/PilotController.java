@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/pilots")
+@CrossOrigin(allowCredentials = "true",allowedHeaders = "*")
 public class PilotController {
 
     private final PilotService pilotService;
@@ -65,6 +66,7 @@ public class PilotController {
     }
     @PostMapping("/")
     public void savePilot(@RequestBody Pilot pilot) {
+        System.out.println(pilot.toString());
         this.pilotService.savePilot(pilot);
     }
 

@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/events")
+@CrossOrigin(allowCredentials = "true",allowedHeaders = "*")
 public class EventController {
 
     private final EventService eventService;
@@ -77,11 +78,13 @@ public class EventController {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
 
         tmpEvent.ifPresent(event-> {
-                tmpPilot.ifPresent(pilot->{
-                    pilot.addEvent(event);
-                    this.pilotService.savePilot(pilot);
+                tmpPilot.ifPresent(pilot -> {
+                    if(!event.getPilotList().contains(pilot)) {
+                        this.eventService.addPilotToEvent(event, pilot);
+                    }
                 });
         });
+
     }
 
     @PostMapping("/{eventId}/rounds")
@@ -141,10 +144,9 @@ public class EventController {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
 
         tmpEvent.ifPresent(event-> {
-            tmpPilot.ifPresent(pilot->{
-                pilot.removeEvent(event);
-                this.pilotService.savePilot(pilot);
-                });
+            tmpPilot.ifPresent(pilot -> {
+                this.eventService.removePilotFromEvent(event,pilot);
+            });
         });
     }
     @DeleteMapping("/{flightId}")

@@ -34,7 +34,7 @@ public class Event {
     @JsonIgnore
     private Location location;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name="pilot_event",joinColumns = {@JoinColumn(name="event_id")},
     inverseJoinColumns = {@JoinColumn(name="pilot_id")})
     @JsonIgnore

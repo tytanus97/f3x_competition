@@ -9,8 +9,6 @@ import javax.persistence.*;
 @Table(name="task")
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Task {
-
-
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "task_id_generator")
     @SequenceGenerator(name="task_id_generator",initialValue = 1,sequenceName = "task_id_seq")

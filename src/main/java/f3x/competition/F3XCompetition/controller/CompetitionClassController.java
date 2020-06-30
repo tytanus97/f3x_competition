@@ -10,6 +10,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/classes")
+@CrossOrigin(allowCredentials = "true",allowedHeaders = "*")
 public class CompetitionClassController {
 
     private final CompetitionClassRepository competitionClassRepository;

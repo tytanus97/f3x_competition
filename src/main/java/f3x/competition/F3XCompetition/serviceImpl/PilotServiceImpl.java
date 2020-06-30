@@ -1,5 +1,6 @@
 package f3x.competition.F3XCompetition.serviceImpl;
 
+import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Pilot;
 import f3x.competition.F3XCompetition.entity.Plane;
 import f3x.competition.F3XCompetition.repository.PilotRepository;
@@ -63,6 +64,9 @@ public class PilotServiceImpl implements PilotService {
     @Override
     @Transactional
     public void delete(Pilot pilot) {
-            this.pilotRepository.delete(pilot);
+            for(Event event: pilot.getPilotEvents()){
+                event.removePilot(pilot);
+            }
+        this.pilotRepository.delete(pilot);
     }
 }

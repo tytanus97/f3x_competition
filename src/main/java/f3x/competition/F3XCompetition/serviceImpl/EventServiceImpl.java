@@ -51,7 +51,6 @@ public class EventServiceImpl implements EventService {
     public void addPilotToEvent(Event event, Pilot pilot) {
         event.addPilot(pilot);
         this.eventRepository.save(event);
-        this.pilotService.savePilot(pilot);
     }
 
     @Override
