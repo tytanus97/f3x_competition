@@ -21,8 +21,8 @@ public class PlaneServiceImpl implements PlaneService {
 
     @Override
     @Transactional
-    public void savePlane(Plane plane) {
-        this.planeRepository.save(plane);
+    public Plane savePlane(Plane plane) {
+        return this.planeRepository.save(plane);
     }
 
     @Override

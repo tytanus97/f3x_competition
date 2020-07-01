@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface PilotService {
     List<Pilot> getAll();
     Optional<Pilot> getById(Long pilotId);
-    void savePilot(Pilot pilot);
+    Pilot savePilot(Pilot pilot);
     void addPlaneToPilot(Pilot pilot, Plane plane);
     void removePlaneFromPilot(Pilot pilot,Plane plane);
     void delete(Pilot pilot);

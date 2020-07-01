@@ -7,7 +7,10 @@ import f3x.competition.F3XCompetition.entity.Plane;
 import f3x.competition.F3XCompetition.repository.PlaneRepository;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.PlaneService;
+import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,64 +31,68 @@ public class PilotController {
     }
 
     @GetMapping("/")
-    public List<Pilot> getAll() {
-        return this.pilotService.getAll();
+    public ResponseEntity<List<Pilot>> getAll() {
+        return new ResponseEntity<>(this.pilotService.getAll(),HttpStatus.OK);
     }
 
     @GetMapping("/{pilotId}")
-    public Optional<Pilot> getById(@PathVariable Long pilotId) {
-        return this.pilotService.getById(pilotId);
+    public ResponseEntity getById(@PathVariable Long pilotId) {
+        return new ResponseEntity<>(this.pilotService.getById(pilotId),HttpStatus.OK);
     }
 
     @GetMapping("/{pilotId}/country")
-    public Optional<Country> getPilotCountry(@PathVariable Long pilotId) {
-        return this.pilotService.getById(pilotId).map(Pilot::getCountry);
+    public ResponseEntity getPilotCountry(@PathVariable Long pilotId) {
+        return new ResponseEntity<>(this.pilotService.getById(pilotId).map(Pilot::getCountry),HttpStatus.OK);
     }
 
     @GetMapping("/{pilotId}/events")
-    public List<Event> getPilotEvents(@PathVariable Long pilotId) {
+    public ResponseEntity<List<Event>> getPilotEvents(@PathVariable Long pilotId) {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
-        return tmpPilot.map(Pilot::getPilotEvents).orElse(null);
+        return new ResponseEntity<>(tmpPilot.map(Pilot::getPilotEvents).orElse(null),HttpStatus.OK);
     }
 
     @GetMapping("/{pilotId}/planes")
-    public List<Plane> getPilotPlanes(@PathVariable Long pilotId) {
+    public ResponseEntity<List<Plane>> getPilotPlanes(@PathVariable Long pilotId) {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
-        return tmpPilot.map(Pilot::getPilotPlanes).orElse(null);
+        return new ResponseEntity<>(tmpPilot.map(Pilot::getPilotPlanes).orElse(null),HttpStatus.OK);
     }
 
     @GetMapping("/{pilotId}/planes/{planeId}")
-    public Plane getPilotPlane(@PathVariable Long pilotId,@PathVariable Long planeId) {
+    public ResponseEntity getPilotPlane(@PathVariable Long pilotId,@PathVariable Long planeId) {
         Optional<Plane> tmpPlane = this.planeService.getById(planeId);
-        return tmpPlane.orElse(null);
+        return new ResponseEntity<>(tmpPlane.orElse(null),HttpStatus.OK);
     }
 
     @PutMapping("/{pilotId}")
-    public void updatePilot(@RequestBody Pilot updatedPilot,@PathVariable Long pilotId) {
-        this.pilotService.savePilot(updatedPilot);
+    public ResponseEntity updatePilot(@RequestBody Pilot updatedPilot,@PathVariable Long pilotId) {
+        return new ResponseEntity<>(this.pilotService.savePilot(updatedPilot),HttpStatus.OK);
     }
     @PostMapping("/")
-    public void savePilot(@RequestBody Pilot pilot) {
+    public ResponseEntity savePilot(@RequestBody Pilot pilot) {
         System.out.println(pilot.toString());
-        this.pilotService.savePilot(pilot);
+       Pilot result =  this.pilotService.savePilot(pilot);
+        return result == null? new ResponseEntity<>(HttpStatus.BAD_REQUEST):
+                new ResponseEntity<>(pilot,HttpStatus.CREATED);
     }
 
     @PostMapping("/{pilotId}/planes")
-    public void addPilotPlane(@PathVariable Long pilotId,@RequestBody Plane plane) {
+    public ResponseEntity<Plane> addPilotPlane(@PathVariable Long pilotId,@RequestBody Plane plane) {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
         tmpPilot.ifPresent(plane::setPilot);
         this.planeService.savePlane(plane);
+        return new ResponseEntity<>(this.planeService.savePlane(plane),HttpStatus.OK);
     }
 
     @DeleteMapping("/{pilotId}/planes/{planeId}")
-    public void deletePlane(@PathVariable Long pilotId,@PathVariable Long planeId) {
+    public ResponseEntity deletePlane(@PathVariable Long pilotId,@PathVariable Long planeId) {
         this.planeService.deleteById(planeId);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/{pilotId}")
-    public void removePilot(@PathVariable Long pilotId) {
+    public ResponseEntity removePilot(@PathVariable Long pilotId) {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
         tmpPilot.ifPresent(this.pilotService::delete);
+        return new ResponseEntity(HttpStatus.OK);
     }
-
 }

@@ -40,8 +40,9 @@ public class PilotServiceImpl implements PilotService {
 
     @Override
     @Transactional
-    public void savePilot(Pilot pilot) {
-            this.pilotRepository.save(pilot);
+    public Pilot savePilot(Pilot pilot) {
+
+       return this.pilotRepository.save(pilot);
     }
 
     @Override
