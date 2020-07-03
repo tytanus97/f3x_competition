@@ -40,6 +40,12 @@ public class PilotServiceImpl implements PilotService {
 
     @Override
     @Transactional
+    public List<Pilot> getPilotsByEmail(String email) {
+        return this.pilotRepository.getAllByPilotEmail(email);
+    }
+
+    @Override
+    @Transactional
     public Pilot savePilot(Pilot pilot) {
 
        return this.pilotRepository.save(pilot);

@@ -30,6 +30,7 @@ public class Pilot {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "country_id")
+    @JsonProperty
     private Country country;
 
     @Column(name="pilot_birth_date")
