@@ -86,7 +86,6 @@ public class PilotController {
     public ResponseEntity<Plane> addPilotPlane(@PathVariable Long pilotId,@RequestBody Plane plane) {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
         tmpPilot.ifPresent(plane::setPilot);
-        this.planeService.savePlane(plane);
         return new ResponseEntity<>(this.planeService.savePlane(plane),HttpStatus.OK);
     }
 

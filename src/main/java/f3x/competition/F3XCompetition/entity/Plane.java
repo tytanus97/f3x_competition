@@ -26,6 +26,10 @@ public class Plane {
     @JsonProperty
     private String planeColor;
 
+    @Column(name="plane_weight")
+    @JsonProperty(defaultValue = "0")
+    private float planeWeight;
+
     @Column(name="plane_name")
     @JsonProperty
     private String planeName;
@@ -38,11 +42,12 @@ public class Plane {
     public Plane() {
     }
 
-    public Plane(float planeWingSpan, String planeColor, String planeName, Pilot pilot) {
+    public Plane(float planeWingSpan, String planeColor, String planeName, Pilot pilot,float planeWeight) {
         this.planeWingSpan = planeWingSpan;
         this.planeColor = planeColor;
         this.planeName = planeName;
         this.pilot = pilot;
+        this.planeWeight = planeWeight;
     }
 
     public Long getPlaneId() {
@@ -85,13 +90,22 @@ public class Plane {
         this.pilot = pilot;
     }
 
+    public float getPlaneWeight() {
+        return planeWeight;
+    }
+
+    public void setPlaneWeight(float planeWeight) {
+        this.planeWeight = planeWeight;
+    }
+
     @Override
     public String toString() {
         return "Plane{" +
                 "planeId=" + planeId +
                 ", planeWingSpan=" + planeWingSpan +
                 ", planeColor='" + planeColor + '\'' +
-                ", planeName='" + planeName + '\'' +
+                ", planeWeight=" + planeWeight +
+                ", planeName='" + planeName + '\''+
                 '}';
     }
 }
