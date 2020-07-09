@@ -89,8 +89,8 @@ public class PilotController {
         return new ResponseEntity<>(this.planeService.savePlane(plane),HttpStatus.OK);
     }
 
-    @DeleteMapping("/{pilotId}/planes/{planeId}")
-    public ResponseEntity deletePlane(@PathVariable Long pilotId,@PathVariable Long planeId) {
+    @DeleteMapping("/planes/{planeId}")
+    public ResponseEntity deletePlane(@PathVariable Long planeId) {
         this.planeService.deleteById(planeId);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -25,6 +25,10 @@ public class Event {
     @JsonProperty
     private byte eventRoundCount;
 
+    @Column(name="event_pilot_count")
+    @JsonProperty
+    private int eventPilotCount;
+
     @Column(name="event_name")
     @JsonProperty
     private String eventName;
@@ -60,7 +64,7 @@ public class Event {
     public Event() {
     }
 
-    public Event(byte eventRoundCount, String eventName, Location location, List<Pilot> pilotList,
+    public Event(int eventPilotCount, byte eventRoundCount, String eventName, Location location, List<Pilot> pilotList,
                  List<Round> roundList, CompetitionClass competitionClass, Timestamp startDate, Timestamp endDate) {
         this.eventRoundCount = eventRoundCount;
         this.eventName = eventName;
@@ -70,6 +74,7 @@ public class Event {
         this.competitionClass = competitionClass;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.eventPilotCount = eventPilotCount;
     }
 
     public List<Round> getRoundList() {
@@ -173,11 +178,20 @@ public class Event {
         this.endDate = endDate;
     }
 
+    public int getEventPilotCount() {
+        return eventPilotCount;
+    }
+
+    public void setEventPilotCount(int eventPilotCount) {
+        this.eventPilotCount = eventPilotCount;
+    }
+
     @Override
     public String toString() {
         return "Event{" +
                 "eventId=" + eventId +
                 ", eventRoundCount=" + eventRoundCount +
+                ", eventPilotCount=" + eventPilotCount +
                 ", eventName='" + eventName + '\'' +
                 ", location=" + location +
                 ", competitionClass=" + competitionClass +

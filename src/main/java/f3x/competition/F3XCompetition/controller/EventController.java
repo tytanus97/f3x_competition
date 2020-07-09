@@ -5,7 +5,10 @@ import f3x.competition.F3XCompetition.service.EventService;
 import f3x.competition.F3XCompetition.service.FlightService;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.RoundService;
+import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -65,6 +68,16 @@ public class EventController {
     public List<Flight> getEventRoundFlights(@PathVariable Long eventId,@PathVariable Long roundId) {
         Optional<Round> tmpRound = this.roundService.getById(roundId);
         return tmpRound.map(Round::getRoundFlights).orElse(null);
+    }
+    @PutMapping("/{eventId}")
+    public ResponseEntity updateEvent(@RequestBody Event event, @PathVariable Long eventId) {
+        Optional<Event> tmpEvent = this.eventService.getById(eventId);
+
+        if(tmpEvent.isPresent()) {
+            this.eventService.saveEvent(event);
+            return new ResponseEntity(HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.NOT_FOUND);
     }
 
     @PostMapping("/")
