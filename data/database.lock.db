@@ -1,6 +1,6 @@
 #FileLock
-#Thu Jul 09 21:14:25 CEST 2020
-server=192.168.56.1\:61392
-hostName=DESKTOP-G1G6I6S
+#Sat Jul 11 00:25:47 CEST 2020
+server=localhost\:50809
+hostName=localhost
 method=file
-id=17334fffe6b6c8802d1f7dae7ab1ad1316ba925c692
+id=1733ad5a7076a48707d2f2fb617b8e9ee0e913b8f53
