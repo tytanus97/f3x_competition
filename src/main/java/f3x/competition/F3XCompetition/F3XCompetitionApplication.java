@@ -2,13 +2,16 @@ package f3x.competition.F3XCompetition;
 
 import f3x.competition.F3XCompetition.repository.CountryRepository;
 import f3x.competition.F3XCompetition.repository.LocationRepository;
+import f3x.competition.F3XCompetition.utils.ImagesUploadLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 @SpringBootApplication
 @EnableSwagger2
+@EnableConfigurationProperties({ImagesUploadLocation.class})
 public class F3XCompetitionApplication {
 
 	@Autowired

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "plane")
@@ -38,6 +39,10 @@ public class Plane {
     @JoinColumn(name="pilot_id")
     @JsonIgnore
     private Pilot pilot;
+
+    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
+    @JoinColumn(name="entityId")
+    private List<Image> imageList;
 
     public Plane() {
     }

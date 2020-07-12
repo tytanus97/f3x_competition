@@ -5,15 +5,22 @@ import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Pilot;
 import f3x.competition.F3XCompetition.entity.Plane;
 import f3x.competition.F3XCompetition.repository.PlaneRepository;
+import f3x.competition.F3XCompetition.service.ImageService;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.PlaneService;
+import f3x.competition.F3XCompetition.utils.UploadFileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/pilots")
@@ -22,11 +29,14 @@ public class PilotController {
 
     private final PilotService pilotService;
     private final PlaneService planeService;
+    private final ImageService imageService;
 
     @Autowired
-    public PilotController(PilotService pilotService, PlaneRepository planeRepository, PlaneService planeService) {
+    public PilotController(PilotService pilotService, PlaneRepository planeRepository, PlaneService planeService, ImageService imageService) {
         this.pilotService = pilotService;
         this.planeService = planeService;
+        this.imageService = imageService;
+
     }
 
     @GetMapping("/")
@@ -87,6 +97,22 @@ public class PilotController {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
         tmpPilot.ifPresent(plane::setPilot);
         return new ResponseEntity<>(this.planeService.savePlane(plane),HttpStatus.OK);
+    }
+
+    @PostMapping("/{pilotId}/planes/{planeId}")
+    public List<UploadFileResponse> uploadPlaneImage(@RequestParam("images") MultipartFile[] images,
+                                                     HttpServletRequest request,@PathVariable Long planeId,@PathVariable Long pilotId) {
+
+
+
+            return Arrays.asList(images).stream().map(file -> {
+                String fileName = this.uploadFileResponse.storeFile(file);
+                String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/planes/")
+                        .path(planeId.toString())
+                        .toUriString();
+                return new UploadFileResponse(fileName,fileDownloadUri,file.getContentType(),file.getSize());
+            }).collect(Collectors.toList());
     }
 
     @DeleteMapping("/planes/{planeId}")
