@@ -22,7 +22,7 @@ public class Image {
 
     @Column(name = "image_size")
     @JsonProperty
-    private String imageSize;
+    private Long imageSize;
     @Column(name="image_type")
     @JsonProperty
     private String imageType;
@@ -42,13 +42,12 @@ public class Image {
     public Image() {
     }
 
-    public Image(String imageName, String imageSize, String imageType, String imageCategory, String imageURI, Long entityId) {
+    public Image(String imageName, Long imageSize, String imageType, String imageCategory, String imageURI) {
         this.imageName = imageName;
         this.imageSize = imageSize;
         this.imageType = imageType;
         this.imageCategory = imageCategory;
         this.imageURI = imageURI;
-        this.entityId = entityId;
     }
 
     public Long getImageId() {
@@ -67,11 +66,11 @@ public class Image {
         this.imageName = imageName;
     }
 
-    public String getImageSize() {
+    public Long getImageSize() {
         return imageSize;
     }
 
-    public void setImageSize(String imageSize) {
+    public void setImageSize(Long imageSize) {
         this.imageSize = imageSize;
     }
 

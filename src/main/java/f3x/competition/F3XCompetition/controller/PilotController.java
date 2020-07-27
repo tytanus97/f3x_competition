@@ -1,14 +1,12 @@
 package f3x.competition.F3XCompetition.controller;
 
-import f3x.competition.F3XCompetition.entity.Country;
-import f3x.competition.F3XCompetition.entity.Event;
-import f3x.competition.F3XCompetition.entity.Pilot;
-import f3x.competition.F3XCompetition.entity.Plane;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import f3x.competition.F3XCompetition.entity.*;
 import f3x.competition.F3XCompetition.repository.PlaneRepository;
 import f3x.competition.F3XCompetition.service.ImageService;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.PlaneService;
-import f3x.competition.F3XCompetition.utils.UploadFileResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -30,13 +26,16 @@ public class PilotController {
     private final PilotService pilotService;
     private final PlaneService planeService;
     private final ImageService imageService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public PilotController(PilotService pilotService, PlaneRepository planeRepository, PlaneService planeService, ImageService imageService) {
+    public PilotController(PilotService pilotService, PlaneRepository planeRepository, PlaneService planeService, ImageService imageService, ObjectMapper objectMapper) {
         this.pilotService = pilotService;
         this.planeService = planeService;
         this.imageService = imageService;
 
+
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/")
@@ -92,28 +91,83 @@ public class PilotController {
                 new ResponseEntity<>(pilot,HttpStatus.CREATED);
     }
 
-    @PostMapping("/{pilotId}/planes")
-    public ResponseEntity<Plane> addPilotPlane(@PathVariable Long pilotId,@RequestBody Plane plane) {
+    @PostMapping(value = "/{pilotId}/planes")
+    public ResponseEntity<Plane> addPilotPlane(@PathVariable Long pilotId, @RequestParam("images") List<MultipartFile> images
+                                                ,@RequestParam(value = "planeBody",required = false) String planeJson ) throws JsonProcessingException {
+
+
+        Plane plane = objectMapper.readValue(planeJson,Plane.class);
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
         tmpPilot.ifPresent(plane::setPilot);
-        return new ResponseEntity<>(this.planeService.savePlane(plane),HttpStatus.OK);
+        Plane savedPlane = this.planeService.savePlane(plane);
+
+        if(savedPlane != null) {
+            List<Image> imageList = images.stream().map(file -> {
+                String fileName = this.imageService.uploadImage(file, Plane.class.getSimpleName().toLowerCase() + '/'
+                        + savedPlane.getPlaneId().toString());
+                String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                        .path("/api/images/plane/")
+                        .path(savedPlane.getPlaneId().toString() + "/")
+                        .path(fileName)
+                        .toUriString();
+
+                System.out.println(fileName);
+                System.out.println(fileDownloadUri);
+
+                Image image = new Image();
+                image.setImageId(0L);
+                image.setImageName(fileName);
+                image.setEntityId(savedPlane.getPlaneId());
+                image.setImageCategory(Plane.class.getSimpleName().toLowerCase());
+                image.setImageSize(file.getSize());
+                image.setImageURI(fileDownloadUri);
+                image.setImageType(file.getContentType());
+                return this.imageService.save(image);
+            }).collect(Collectors.toList());
+
+            savedPlane.setImageList(imageList);
+            return new ResponseEntity<>(savedPlane, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
     }
 
-    @PostMapping("/{pilotId}/planes/{planeId}")
-    public List<UploadFileResponse> uploadPlaneImage(@RequestParam("images") MultipartFile[] images,
-                                                     HttpServletRequest request,@PathVariable Long planeId,@PathVariable Long pilotId) {
+    /*@PostMapping(value = "/planes/{planeId}/images")
+    public ResponseEntity<List<String>> uploadPlaneImage(@RequestParam("planeImages") MultipartFile[] images,
+                                                     @PathVariable Long planeId) {
 
-
-
-            return Arrays.asList(images).stream().map(file -> {
-                String fileName = this.uploadFileResponse.storeFile(file);
+        if(Arrays.asList(images).isEmpty()) System.out.println("kurwa puste do chuja wafla");
+        for (MultipartFile file: images) {
+            System.out.println("Plik: "+ file);
+        }
+        System.out.println("Dodaje zdjecie do samolotu");
+        System.out.println(images);
+        List<String>  uris = Arrays.stream(images).map(file -> {
+            System.out.println(file);
+                String fileName = this.imageService.uploadImage(file,Plane.class.toString());
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                         .path("/planes/")
-                        .path(planeId.toString())
+                        .path(planeId.toString()+"/")
+                        .path(fileName)
                         .toUriString();
-                return new UploadFileResponse(fileName,fileDownloadUri,file.getContentType(),file.getSize());
+
+                System.out.println(fileName);
+                System.out.println(fileDownloadUri);
+
+                Image image = new Image();
+                image.setImageId(0L);
+                image.setImageName(fileName);
+                image.setImageCategory(Plane.class.toString());
+                image.setImageSize(file.getSize());
+                image.setImageURI(fileDownloadUri);
+                image.setImageType(file.getContentType());
+                System.out.println(image.toString());
+                this.imageService.save(image);
+                return fileDownloadUri;
             }).collect(Collectors.toList());
-    }
+        System.out.println(uris);
+        return new ResponseEntity<>(uris,HttpStatus.OK);
+    }*/
 
     @DeleteMapping("/planes/{planeId}")
     public ResponseEntity deletePlane(@PathVariable Long planeId) {

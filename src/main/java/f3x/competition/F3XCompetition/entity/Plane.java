@@ -41,7 +41,7 @@ public class Plane {
     private Pilot pilot;
 
     @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name="entityId")
+    @JoinColumn(name="entity_id")
     private List<Image> imageList;
 
     public Plane() {
@@ -97,6 +97,14 @@ public class Plane {
 
     public float getPlaneWeight() {
         return planeWeight;
+    }
+
+    public List<Image> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<Image> imageList) {
+        this.imageList = imageList;
     }
 
     public void setPlaneWeight(float planeWeight) {

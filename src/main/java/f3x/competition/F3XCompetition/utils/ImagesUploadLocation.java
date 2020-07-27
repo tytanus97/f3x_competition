@@ -6,12 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class ImagesUploadLocation {
     private String uploadDir;
 
-    public ImagesUploadLocation(String uploadDir) {
-        this.uploadDir = uploadDir;
-    }
-
     public String getUploadDir() {
-        return uploadDir;
+        return this.uploadDir;
     }
 
     public void setUploadDir(String uploadDir) {
