@@ -1,12 +1,16 @@
 package f3x.competition.F3XCompetition.repository;
 
-import f3x.competition.F3XCompetition.entity.Image;
+import f3x.competition.F3XCompetition.entity.images.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface ImageRepository extends JpaRepository<Image,Long> {
-    Optional<List<Image>> findAllByEntityIdAndImageCategory(Long entityId, String imageCategory);
+
+    @Query("SELECT i FROM Image i WHERE i.entityId = ?1 AND i.entityType = ?2")
+    Optional<List<Image>> findAllByEntityIdAndEntityType(Long entityId,String entityType);
+
 
 }

@@ -1,4 +1,4 @@
-package f3x.competition.F3XCompetition.entity;
+package f3x.competition.F3XCompetition.entity.images;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.persistence.*;
 
 @Entity
-@Table(name="image")
+@Table(name="images")
 public class Image {
 
     @Id
@@ -20,16 +20,12 @@ public class Image {
     @JsonProperty
     private String imageName;
 
-    @Column(name = "image_size")
+    @Column(name="image_size")
     @JsonProperty
     private Long imageSize;
-    @Column(name="image_type")
-    @JsonProperty
-    private String imageType;
 
-    @Column(name="image_category")
-    @JsonProperty
-    private String imageCategory;
+    @Column(name="image_type")
+    private String imageType;
 
     @Column(name="image_uri")
     @JsonProperty
@@ -39,14 +35,16 @@ public class Image {
     @JsonIgnore
     private Long entityId;
 
+    @Column(name="entity_type")
+    @JsonIgnore
+    private String entityType;
+
     public Image() {
     }
-
-    public Image(String imageName, Long imageSize, String imageType, String imageCategory, String imageURI) {
+    public Image(String imageName, Long imageSize, String imageType, String imageURI) {
         this.imageName = imageName;
         this.imageSize = imageSize;
         this.imageType = imageType;
-        this.imageCategory = imageCategory;
         this.imageURI = imageURI;
     }
 
@@ -90,14 +88,6 @@ public class Image {
         this.imageURI = imageURI;
     }
 
-    public String getImageCategory() {
-        return imageCategory;
-    }
-
-    public void setImageCategory(String imageCategory) {
-        this.imageCategory = imageCategory;
-    }
-
     public Long getEntityId() {
         return entityId;
     }
@@ -106,14 +96,12 @@ public class Image {
         this.entityId = entityId;
     }
 
-    @Override
-    public String toString() {
-        return "Image{" +
-                "imageId=" + imageId +
-                ", imageName='" + imageName + '\'' +
-                ", imageSize='" + imageSize + '\'' +
-                ", imageType='" + imageType + '\'' +
-                ", imageURI='" + imageURI + '\'' +
-                '}';
+    public String getEntityType() {
+        return entityType;
+    }
+
+    public void setEntityType(String entityType) {
+        this.entityType = entityType;
     }
 }
+

@@ -1,4 +1,4 @@
-package f3x.competition.F3XCompetition.utils;
+package f3x.competition.F3XCompetition.exceptions;
 
 public class FileStorageException extends RuntimeException {
 

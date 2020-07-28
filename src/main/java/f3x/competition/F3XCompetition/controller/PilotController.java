@@ -2,7 +2,12 @@ package f3x.competition.F3XCompetition.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import f3x.competition.F3XCompetition.entity.*;
+import f3x.competition.F3XCompetition.dto.PlaneDTO;
+import f3x.competition.F3XCompetition.entity.Country;
+import f3x.competition.F3XCompetition.entity.Event;
+import f3x.competition.F3XCompetition.entity.Pilot;
+import f3x.competition.F3XCompetition.entity.Plane;
+import f3x.competition.F3XCompetition.entity.images.Image;
 import f3x.competition.F3XCompetition.repository.PlaneRepository;
 import f3x.competition.F3XCompetition.service.ImageService;
 import f3x.competition.F3XCompetition.service.PilotService;
@@ -33,8 +38,6 @@ public class PilotController {
         this.pilotService = pilotService;
         this.planeService = planeService;
         this.imageService = imageService;
-
-
         this.objectMapper = objectMapper;
     }
 
@@ -68,15 +71,43 @@ public class PilotController {
     }
 
     @GetMapping("/{pilotId}/planes")
-    public ResponseEntity<List<Plane>> getPilotPlanes(@PathVariable Long pilotId) {
+    public ResponseEntity<List<PlaneDTO>> getPilotPlanes(@PathVariable Long pilotId) {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
-        return new ResponseEntity<>(tmpPilot.map(Pilot::getPilotPlanes).orElse(null),HttpStatus.OK);
+        if(tmpPilot.isPresent()) {
+            List<Plane> pilotPlanes = tmpPilot.get().getPilotPlanes();
+            List<PlaneDTO> pilotPlanesDTO = pilotPlanes.stream().map(plane -> {
+                PlaneDTO planeDTO = new PlaneDTO();
+                planeDTO.setPlaneId(plane.getPlaneId());
+                planeDTO.setPlaneColor(plane.getPlaneColor());
+                planeDTO.setPlaneName(plane.getPlaneName());
+                planeDTO.setPlaneWeight(plane.getPlaneWeight());
+                planeDTO.setPlaneWingSpan(plane.getPlaneWingSpan());
+                Optional<List<Image>> imageList = this.imageService.findByEntityIdAndEntityType(plane.getPlaneId(),"plane");
+                planeDTO.setImageList(imageList.orElse(null));
+                return planeDTO;
+            }).collect(Collectors.toList());
+            return new ResponseEntity<>(pilotPlanesDTO,HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/{pilotId}/planes/{planeId}")
-    public ResponseEntity<Plane> getPilotPlane(@PathVariable Long pilotId, @PathVariable Long planeId) {
+    public ResponseEntity<PlaneDTO> getPilotPlane(@PathVariable Long pilotId, @PathVariable Long planeId) {
         Optional<Plane> tmpPlane = this.planeService.getById(planeId);
-        return new ResponseEntity<>(tmpPlane.orElse(null),HttpStatus.OK);
+
+        if(tmpPlane.isPresent()) {
+            Plane plane = tmpPlane.get();
+            PlaneDTO planeDTO = new PlaneDTO();
+
+            planeDTO.setPlaneId(plane.getPlaneId());
+            planeDTO.setPlaneColor(plane.getPlaneColor());
+            planeDTO.setPlaneName(plane.getPlaneName());
+            planeDTO.setPlaneWeight(plane.getPlaneWeight());
+            planeDTO.setPlaneWingSpan(plane.getPlaneWingSpan());
+            Optional<List<Image>> imageList = this.imageService.findByEntityIdAndEntityType(plane.getPlaneId(),"plane");
+            planeDTO.setImageList(imageList.orElse(null));
+            return new ResponseEntity<>(planeDTO,HttpStatus.OK);
+        } else return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @PutMapping("/{pilotId}")
@@ -93,16 +124,27 @@ public class PilotController {
 
     @PostMapping(value = "/{pilotId}/planes")
     public ResponseEntity<Plane> addPilotPlane(@PathVariable Long pilotId, @RequestParam("images") List<MultipartFile> images
-                                                ,@RequestParam(value = "planeBody",required = false) String planeJson ) throws JsonProcessingException {
+                                                ,@RequestParam(value = "planeBody",required = false) String planeJson ) {
 
-
-        Plane plane = objectMapper.readValue(planeJson,Plane.class);
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
-        tmpPilot.ifPresent(plane::setPilot);
-        Plane savedPlane = this.planeService.savePlane(plane);
+        final Plane plane = new Plane();
+        try {
+            PlaneDTO receivedPlane = objectMapper.readValue(planeJson, PlaneDTO.class);
+            tmpPilot.ifPresent(plane::setPilot);
+            plane.setPlaneColor(receivedPlane.getPlaneColor());
+            plane.setPlaneId(receivedPlane.getPlaneId());
+            plane.setPlaneName(receivedPlane.getPlaneName());
+            plane.setPlaneWeight(receivedPlane.getPlaneWeight());
+            plane.setPlaneWingSpan(receivedPlane.getPlaneWingSpan());
+
+        }catch(JsonProcessingException exc) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+         Plane savedPlane = this.planeService.savePlane(plane);
 
         if(savedPlane != null) {
-            List<Image> imageList = images.stream().map(file -> {
+            images.forEach(file -> {
                 String fileName = this.imageService.uploadImage(file, Plane.class.getSimpleName().toLowerCase() + '/'
                         + savedPlane.getPlaneId().toString());
                 String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
@@ -118,56 +160,18 @@ public class PilotController {
                 image.setImageId(0L);
                 image.setImageName(fileName);
                 image.setEntityId(savedPlane.getPlaneId());
-                image.setImageCategory(Plane.class.getSimpleName().toLowerCase());
+                image.setEntityType(Plane.class.getSimpleName().toLowerCase());
                 image.setImageSize(file.getSize());
                 image.setImageURI(fileDownloadUri);
                 image.setImageType(file.getContentType());
-                return this.imageService.save(image);
-            }).collect(Collectors.toList());
+                this.imageService.save(image);
+            });
 
-            savedPlane.setImageList(imageList);
             return new ResponseEntity<>(savedPlane, HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
     }
-
-    /*@PostMapping(value = "/planes/{planeId}/images")
-    public ResponseEntity<List<String>> uploadPlaneImage(@RequestParam("planeImages") MultipartFile[] images,
-                                                     @PathVariable Long planeId) {
-
-        if(Arrays.asList(images).isEmpty()) System.out.println("kurwa puste do chuja wafla");
-        for (MultipartFile file: images) {
-            System.out.println("Plik: "+ file);
-        }
-        System.out.println("Dodaje zdjecie do samolotu");
-        System.out.println(images);
-        List<String>  uris = Arrays.stream(images).map(file -> {
-            System.out.println(file);
-                String fileName = this.imageService.uploadImage(file,Plane.class.toString());
-                String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                        .path("/planes/")
-                        .path(planeId.toString()+"/")
-                        .path(fileName)
-                        .toUriString();
-
-                System.out.println(fileName);
-                System.out.println(fileDownloadUri);
-
-                Image image = new Image();
-                image.setImageId(0L);
-                image.setImageName(fileName);
-                image.setImageCategory(Plane.class.toString());
-                image.setImageSize(file.getSize());
-                image.setImageURI(fileDownloadUri);
-                image.setImageType(file.getContentType());
-                System.out.println(image.toString());
-                this.imageService.save(image);
-                return fileDownloadUri;
-            }).collect(Collectors.toList());
-        System.out.println(uris);
-        return new ResponseEntity<>(uris,HttpStatus.OK);
-    }*/
 
     @DeleteMapping("/planes/{planeId}")
     public ResponseEntity deletePlane(@PathVariable Long planeId) {

@@ -1,11 +1,8 @@
 package f3x.competition.F3XCompetition.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name = "plane")
@@ -16,33 +13,23 @@ public class Plane {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "plane_id_generator")
     @SequenceGenerator(name="plane_id_generator",initialValue = 1,sequenceName = "plane_id_seq")
     @Column(name="plane_id")
-    @JsonProperty
     private Long planeId;
 
     @Column(name="plane_wing_span")
-    @JsonProperty
     private float planeWingSpan;
 
     @Column(name="plane_color")
-    @JsonProperty
     private String planeColor;
 
     @Column(name="plane_weight")
-    @JsonProperty(defaultValue = "0")
     private float planeWeight;
 
     @Column(name="plane_name")
-    @JsonProperty
     private String planeName;
 
     @ManyToOne
     @JoinColumn(name="pilot_id")
-    @JsonIgnore
     private Pilot pilot;
-
-    @OneToMany(cascade = CascadeType.ALL,orphanRemoval = true)
-    @JoinColumn(name="entity_id")
-    private List<Image> imageList;
 
     public Plane() {
     }
@@ -97,14 +84,6 @@ public class Plane {
 
     public float getPlaneWeight() {
         return planeWeight;
-    }
-
-    public List<Image> getImageList() {
-        return imageList;
-    }
-
-    public void setImageList(List<Image> imageList) {
-        this.imageList = imageList;
     }
 
     public void setPlaneWeight(float planeWeight) {

@@ -1,11 +1,11 @@
 package f3x.competition.F3XCompetition.serviceImpl;
 
 
-import f3x.competition.F3XCompetition.entity.Image;
+import f3x.competition.F3XCompetition.entity.images.Image;
+import f3x.competition.F3XCompetition.exceptions.FileNotFoundException;
+import f3x.competition.F3XCompetition.exceptions.FileStorageException;
 import f3x.competition.F3XCompetition.repository.ImageRepository;
 import f3x.competition.F3XCompetition.service.ImageService;
-import f3x.competition.F3XCompetition.utils.FileNotFoundException;
-import f3x.competition.F3XCompetition.utils.FileStorageException;
 import f3x.competition.F3XCompetition.utils.ImagesUploadLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -20,6 +20,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ImageServiceImpl  implements ImageService {
@@ -84,5 +86,10 @@ public class ImageServiceImpl  implements ImageService {
     @Override
     public Image save(Image image) {
         return this.imageRepository.save(image);
+    }
+
+    @Override
+    public Optional<List<Image>> findByEntityIdAndEntityType(Long entityId, String entityType) {
+        return imageRepository.findAllByEntityIdAndEntityType(entityId,entityType);
     }
 }
