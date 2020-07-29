@@ -1,11 +1,8 @@
 package f3x.competition.F3XCompetition.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import f3x.competition.F3XCompetition.entity.Pilot;
-import f3x.competition.F3XCompetition.entity.images.Image;
+import f3x.competition.F3XCompetition.entity.Image;
 
-import javax.persistence.*;
 import java.util.List;
 
 public class PlaneDTO {

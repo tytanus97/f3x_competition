@@ -1,6 +1,6 @@
 package f3x.competition.F3XCompetition.service;
 
-import f3x.competition.F3XCompetition.entity.images.Image;
+import f3x.competition.F3XCompetition.entity.Image;
 import org.springframework.core.io.Resource;
 import org.springframework.web.multipart.MultipartFile;
 

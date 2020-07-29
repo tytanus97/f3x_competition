@@ -1,4 +1,4 @@
-package f3x.competition.F3XCompetition.entity.images;
+package f3x.competition.F3XCompetition.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;

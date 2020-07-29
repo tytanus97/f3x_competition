@@ -1,7 +1,7 @@
 package f3x.competition.F3XCompetition.serviceImpl;
 
 
-import f3x.competition.F3XCompetition.entity.images.Image;
+import f3x.competition.F3XCompetition.entity.Image;
 import f3x.competition.F3XCompetition.exceptions.FileNotFoundException;
 import f3x.competition.F3XCompetition.exceptions.FileStorageException;
 import f3x.competition.F3XCompetition.repository.ImageRepository;

@@ -2,16 +2,19 @@ package f3x.competition.F3XCompetition.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import f3x.competition.F3XCompetition.dto.PilotDTO;
 import f3x.competition.F3XCompetition.dto.PlaneDTO;
 import f3x.competition.F3XCompetition.entity.Country;
 import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Pilot;
 import f3x.competition.F3XCompetition.entity.Plane;
-import f3x.competition.F3XCompetition.entity.images.Image;
+import f3x.competition.F3XCompetition.entity.Image;
 import f3x.competition.F3XCompetition.repository.PlaneRepository;
 import f3x.competition.F3XCompetition.service.ImageService;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.PlaneService;
+import f3x.competition.F3XCompetition.serviceImpl.PilotServiceImpl;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,7 +37,8 @@ public class PilotController {
     private final ObjectMapper objectMapper;
 
     @Autowired
-    public PilotController(PilotService pilotService, PlaneRepository planeRepository, PlaneService planeService, ImageService imageService, ObjectMapper objectMapper) {
+    public PilotController(PilotService pilotService, PlaneRepository planeRepository,
+                           PlaneService planeService, ImageService imageService, ObjectMapper objectMapper) {
         this.pilotService = pilotService;
         this.planeService = planeService;
         this.imageService = imageService;
@@ -115,11 +119,12 @@ public class PilotController {
         return new ResponseEntity<>(this.pilotService.savePilot(updatedPilot),HttpStatus.OK);
     }
     @PostMapping("/")
-    public ResponseEntity savePilot(@RequestBody Pilot pilot) {
-        System.out.println(pilot.toString());
-       Pilot result =  this.pilotService.savePilot(pilot);
-        return result == null? new ResponseEntity<>(HttpStatus.BAD_REQUEST):
-                new ResponseEntity<>(pilot,HttpStatus.CREATED);
+    public ResponseEntity savePilot(@RequestBody PilotDTO pilotDTO) {
+        System.out.println(pilotDTO.toString());
+        Pilot pilotEntity = ((PilotServiceImpl)this.pilotService).pilotDTOtoPilot(pilotDTO);
+        pilotEntity =  this.pilotService.savePilot(pilotEntity);
+        return pilotEntity == null? new ResponseEntity<>(HttpStatus.BAD_REQUEST):
+                new ResponseEntity<>(pilotEntity,HttpStatus.CREATED);
     }
 
     @PostMapping(value = "/{pilotId}/planes")
@@ -185,4 +190,5 @@ public class PilotController {
         tmpPilot.ifPresent(this.pilotService::delete);
         return new ResponseEntity(HttpStatus.OK);
     }
+
 }

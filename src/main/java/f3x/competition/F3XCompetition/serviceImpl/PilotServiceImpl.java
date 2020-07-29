@@ -1,11 +1,13 @@
 package f3x.competition.F3XCompetition.serviceImpl;
 
+import f3x.competition.F3XCompetition.dto.PilotDTO;
 import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Pilot;
 import f3x.competition.F3XCompetition.entity.Plane;
 import f3x.competition.F3XCompetition.repository.PilotRepository;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.PlaneService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,12 +20,14 @@ public class PilotServiceImpl implements PilotService {
 
     private final PilotRepository pilotRepository;
     private final PlaneService planeService;
+    private final ModelMapper modelMapper;
 
 
     @Autowired
-    public PilotServiceImpl(PilotRepository pilotRepository, PlaneService planeService) {
+    public PilotServiceImpl(PilotRepository pilotRepository, PlaneService planeService, ModelMapper modelMapper) {
         this.pilotRepository = pilotRepository;
         this.planeService = planeService;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -75,5 +79,13 @@ public class PilotServiceImpl implements PilotService {
                 event.removePilot(pilot);
             }
         this.pilotRepository.delete(pilot);
+    }
+
+    public PilotDTO pilotToPilotDTO(Pilot pilot) {
+        return modelMapper.map(pilot,PilotDTO.class);
+    }
+
+    public Pilot pilotDTOtoPilot(PilotDTO pilotDTO) {
+        return modelMapper.map(pilotDTO,Pilot.class);
     }
 }

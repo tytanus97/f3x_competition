@@ -1,6 +1,6 @@
 package f3x.competition.F3XCompetition.repository;
 
-import f3x.competition.F3XCompetition.entity.images.Image;
+import f3x.competition.F3XCompetition.entity.Image;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
