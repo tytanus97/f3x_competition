@@ -7,13 +7,16 @@ import f3x.competition.F3XCompetition.exceptions.FileStorageException;
 import f3x.competition.F3XCompetition.repository.ImageRepository;
 import f3x.competition.F3XCompetition.service.ImageService;
 import f3x.competition.F3XCompetition.utils.ImagesUploadLocation;
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
@@ -78,17 +81,29 @@ public class ImageServiceImpl  implements ImageService {
     }
 
     @Override
-    public void delete(Long imageId)
+    @Transactional
+    public void delete(String context, Long entityId)
     {
-        this.imageRepository.deleteById(imageId);
+        this.imageRepository.deleteAllByEntityIdAndEntityType(entityId,context);
+        Path planeImagesLocation = this.fileStorageLocation.resolve(context + "/" + entityId);
+        File directory = new File(planeImagesLocation.toUri());
+        System.out.println(planeImagesLocation.toString());
+        try {
+           // Files.deleteIfExists(planeImagesLocation);
+            FileUtils.deleteDirectory(directory);
+        } catch (IOException e) {
+            throw new FileNotFoundException("Directory doesn't exist");
+        }
     }
 
     @Override
+    @Transactional
     public Image save(Image image) {
         return this.imageRepository.save(image);
     }
 
     @Override
+    @Transactional
     public Optional<List<Image>> findByEntityIdAndEntityType(Long entityId, String entityType) {
         return imageRepository.findAllByEntityIdAndEntityType(entityId,entityType);
     }

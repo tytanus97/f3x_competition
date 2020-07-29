@@ -10,7 +10,8 @@ import java.util.Optional;
 public interface ImageService {
     String uploadImage(MultipartFile image,String context);
     Resource loadImage(String fileName,String context);
-    void delete(Long imageId);
+    void delete(String context,Long entityId);
     Image save(Image image);
     Optional<List<Image>> findByEntityIdAndEntityType(Long entityId, String entityType);
+
 }

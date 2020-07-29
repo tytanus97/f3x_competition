@@ -78,8 +78,13 @@ public class PilotServiceImpl implements PilotService {
             for(Event event: pilot.getPilotEvents()){
                 event.removePilot(pilot);
             }
+            for(Plane plane: pilot.getPilotPlanes()) {
+                this.planeService.delete(plane);
+            }
         this.pilotRepository.delete(pilot);
     }
+
+
 
     public PilotDTO pilotToPilotDTO(Pilot pilot) {
         return modelMapper.map(pilot,PilotDTO.class);

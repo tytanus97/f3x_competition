@@ -170,14 +170,22 @@ public class PilotController {
 
     @DeleteMapping("/planes/{planeId}")
     public ResponseEntity deletePlane(@PathVariable Long planeId) {
-        this.planeService.deleteById(planeId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        Optional<Plane> plane = this.planeService.getById(planeId);
+        if(plane.isPresent()) {
+            this.planeService.delete(plane.get());
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @DeleteMapping("/{pilotId}")
     public ResponseEntity removePilot(@PathVariable Long pilotId) {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
-        tmpPilot.ifPresent(this.pilotService::delete);
+        tmpPilot.ifPresent(pilot -> {
+
+            this.pilotService.delete(pilot);
+        });
         return new ResponseEntity(HttpStatus.OK);
     }
 

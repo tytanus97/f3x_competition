@@ -12,5 +12,6 @@ public interface ImageRepository extends JpaRepository<Image,Long> {
     @Query("SELECT i FROM Image i WHERE i.entityId = ?1 AND i.entityType = ?2")
     Optional<List<Image>> findAllByEntityIdAndEntityType(Long entityId,String entityType);
 
+    void deleteAllByEntityIdAndEntityType(Long entityId,String entityType);
 
 }
