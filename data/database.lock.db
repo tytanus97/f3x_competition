@@ -1,6 +1,6 @@
 #FileLock
-#Wed Jul 29 10:44:03 CEST 2020
-server=192.168.56.1\:50085
+#Wed Jul 29 11:50:01 CEST 2020
+server=192.168.56.1\:53146
 hostName=DESKTOP-G1G6I6S
 method=file
-id=17399be0e5af73f9a9c10b46166abe68fcd1ea30cbd
+id=17399fa75e0acafe06b403cf984e4e6f8f55c031bba
