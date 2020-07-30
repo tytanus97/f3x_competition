@@ -17,6 +17,7 @@ import f3x.competition.F3XCompetition.serviceImpl.PilotServiceImpl;
 import f3x.competition.F3XCompetition.serviceImpl.PlaneServiceImpl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -57,9 +58,16 @@ public class PilotController {
     }
 
     @GetMapping("/email")
-    public ResponseEntity<List<Pilot>> getAllByEmail(@RequestParam("email") String email) {
+    public ResponseEntity<Pilot> getByEmail(@RequestParam("email") String email) {
         if(!email.isEmpty()) {
-            return new ResponseEntity<>(this.pilotService.getPilotsByEmail(email),HttpStatus.OK);
+            return new ResponseEntity<>(this.pilotService.getPilotByEmail(email),HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    public ResponseEntity<Pilot> getByUsername(@RequestParam("username") String username) {
+        if(!username.isEmpty()) {
+            return new ResponseEntity<>(this.pilotService.findByUserName(username),HttpStatus.OK);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

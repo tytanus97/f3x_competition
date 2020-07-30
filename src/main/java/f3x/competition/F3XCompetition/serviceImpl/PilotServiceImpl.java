@@ -3,6 +3,7 @@ package f3x.competition.F3XCompetition.serviceImpl;
 import f3x.competition.F3XCompetition.dto.PilotDTO;
 import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Pilot;
+import f3x.competition.F3XCompetition.entity.PilotCredential;
 import f3x.competition.F3XCompetition.entity.Plane;
 import f3x.competition.F3XCompetition.repository.PilotCredentialRepository;
 import f3x.competition.F3XCompetition.repository.PilotRepository;
@@ -47,8 +48,8 @@ public class PilotServiceImpl implements PilotService {
 
     @Override
     @Transactional
-    public List<Pilot> getPilotsByEmail(String email) {
-        return this.pilotRepository.getAllByPilotEmail(email);
+    public Pilot getPilotByEmail(String email) {
+        return this.pilotRepository.getByPilotEmail(email);
     }
 
     @Override
@@ -89,8 +90,9 @@ public class PilotServiceImpl implements PilotService {
 
     @Override
     @Transactional
-    public List<Pilot> findAllByUserName(String username) {
-        return this.pilotCredentialRepository.findByUsername(username);
+    public Pilot findByUserName(String username) {
+        PilotCredential credential = this.pilotCredentialRepository.findByUsername(username);
+        return credential.getPilot();
     }
 
 

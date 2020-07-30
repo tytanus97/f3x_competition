@@ -8,5 +8,5 @@ import java.util.List;
 
 @Repository
 public interface PilotRepository extends JpaRepository<Pilot,Long> {
-    List<Pilot> getAllByPilotEmail(String pilotEmail);
+    Pilot getByPilotEmail(String pilotEmail);
 }

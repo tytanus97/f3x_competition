@@ -9,11 +9,11 @@ import java.util.Optional;
 public interface PilotService {
     List<Pilot> getAll();
     Optional<Pilot> getById(Long pilotId);
-    List<Pilot> getPilotsByEmail(String email);
+    Pilot getPilotByEmail(String email);
     Pilot savePilot(Pilot pilot);
     void addPlaneToPilot(Pilot pilot, Plane plane);
     void removePlaneFromPilot(Pilot pilot,Plane plane);
     void delete(Pilot pilot);
-    List<Pilot> findAllByUserName(String username);
+    Pilot findByUserName(String username);
 
 }
