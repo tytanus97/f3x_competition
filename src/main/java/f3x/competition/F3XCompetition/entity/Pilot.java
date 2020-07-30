@@ -53,8 +53,8 @@ public class Pilot {
     @JsonIgnore
     private List<Event> pilotEvents;
 
-   /* @OneToOne(mappedBy = "pilot")
-    private PilotCredential pilotCredential;*/
+    @OneToOne(mappedBy = "pilot")
+    private PilotCredential pilotCredential;
 
     public Pilot() {
     }
@@ -170,13 +170,13 @@ public class Pilot {
         this.pilotEmail = pilotEmail;
     }
 
-  /*  public PilotCredential getPilotCredential() {
+   public PilotCredential getPilotCredential() {
         return pilotCredential;
     }
 
     public void setPilotCredential(PilotCredential pilotCredential) {
         this.pilotCredential = pilotCredential;
-    }*/
+    }
 
     @Override
     public String toString() {

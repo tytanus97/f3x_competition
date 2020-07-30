@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PilotCredentialRepository extends JpaRepository<PilotCredential,Long> {
     PilotCredential findByUsername(String username);
+
 }

@@ -14,5 +14,6 @@ public interface PilotService {
     void addPlaneToPilot(Pilot pilot, Plane plane);
     void removePlaneFromPilot(Pilot pilot,Plane plane);
     void delete(Pilot pilot);
+    List<Pilot> findAllByUserName(String username);
 
 }

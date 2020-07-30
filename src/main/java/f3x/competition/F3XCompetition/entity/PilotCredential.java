@@ -18,20 +18,19 @@ public class PilotCredential {
     @Column(name="username")
     private String username;
 
-   /* @OneToOne
+    @OneToOne
     @JoinColumn(name="pilot_id")
-    private Pilot pilot;*/
+    private Pilot pilot;
 
-   // private List<String> roles;
 
     public PilotCredential() {
     }
 
-    public PilotCredential(String password, String username/*, Pilot pilot,  List<String> roles*/) {
+    public PilotCredential(String password, String username, Pilot pilot ) {
         this.password = password;
         this.username = username;
-       // this.pilot = pilot;
-        //this.roles = roles;
+        this.pilot = pilot;
+
     }
 
 
@@ -60,7 +59,7 @@ public class PilotCredential {
         this.username = username;
     }
 
-   /* public Pilot getPilot() {
+    public Pilot getPilot() {
         return pilot;
     }
 
@@ -68,11 +67,5 @@ public class PilotCredential {
         this.pilot = pilot;
     }
 
-    public List<String> getRoles() {
-        return roles;
-    }
 
-    public void setRoles(List<String> roles) {
-        this.roles = roles;
-    } */
 }

@@ -4,6 +4,7 @@ import f3x.competition.F3XCompetition.dto.PilotDTO;
 import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Pilot;
 import f3x.competition.F3XCompetition.entity.Plane;
+import f3x.competition.F3XCompetition.repository.PilotCredentialRepository;
 import f3x.competition.F3XCompetition.repository.PilotRepository;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.PlaneService;
@@ -20,13 +21,15 @@ public class PilotServiceImpl implements PilotService {
 
     private final PilotRepository pilotRepository;
     private final PlaneService planeService;
+    private final PilotCredentialRepository pilotCredentialRepository;
     private final ModelMapper modelMapper;
 
 
     @Autowired
-    public PilotServiceImpl(PilotRepository pilotRepository, PlaneService planeService, ModelMapper modelMapper) {
+    public PilotServiceImpl(PilotRepository pilotRepository, PlaneService planeService, PilotCredentialRepository pilotCredentialRepository, ModelMapper modelMapper) {
         this.pilotRepository = pilotRepository;
         this.planeService = planeService;
+        this.pilotCredentialRepository = pilotCredentialRepository;
         this.modelMapper = modelMapper;
     }
 
@@ -84,6 +87,11 @@ public class PilotServiceImpl implements PilotService {
         this.pilotRepository.delete(pilot);
     }
 
+    @Override
+    @Transactional
+    public List<Pilot> findAllByUserName(String username) {
+        return this.pilotCredentialRepository.findByUsername(username);
+    }
 
 
     public PilotDTO pilotToPilotDTO(Pilot pilot) {
