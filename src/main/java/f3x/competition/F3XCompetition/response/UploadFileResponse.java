@@ -1,4 +1,4 @@
-package f3x.competition.F3XCompetition.responses;
+package f3x.competition.F3XCompetition.response;
 
 public class UploadFileResponse {
 

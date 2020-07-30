@@ -89,7 +89,7 @@ public class ImageServiceImpl  implements ImageService {
         File directory = new File(planeImagesLocation.toUri());
         System.out.println(planeImagesLocation.toString());
         try {
-           // Files.deleteIfExists(planeImagesLocation);
+
             FileUtils.deleteDirectory(directory);
         } catch (IOException e) {
             throw new FileNotFoundException("Directory doesn't exist");
