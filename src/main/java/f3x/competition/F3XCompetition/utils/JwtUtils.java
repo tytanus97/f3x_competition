@@ -21,7 +21,7 @@ public class JwtUtils {
          return extractExpiration(token).before(new Date());
     }
 
-    private String extractUsername(String token) {
+    public String extractUsername(String token) {
          return extractClaim(token,Claims::getSubject);
     }
 
