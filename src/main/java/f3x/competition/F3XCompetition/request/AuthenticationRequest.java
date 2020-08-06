@@ -1,8 +1,13 @@
 package f3x.competition.F3XCompetition.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class AuthenticationRequest {
 
+    @JsonProperty
     private String username;
+
+    @JsonProperty
     private String password;
 
     public AuthenticationRequest() {
@@ -30,4 +35,11 @@ public class AuthenticationRequest {
     }
 
 
+    @Override
+    public String toString() {
+        return "AuthenticationRequest{" +
+                "username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }

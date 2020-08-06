@@ -1,7 +1,8 @@
 package f3x.competition.F3XCompetition.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Table(name="pilot_credential")
@@ -13,9 +14,11 @@ public class PilotCredential {
     private Long credentialId;
 
     @Column(name="password")
+    @JsonProperty
     private String password;
 
     @Column(name="username")
+    @JsonProperty
     private String username;
 
     @OneToOne
@@ -24,6 +27,12 @@ public class PilotCredential {
 
 
     public PilotCredential() {
+    }
+
+    public PilotCredential(String password, String username ) {
+        this.password = password;
+        this.username = username;
+
     }
 
     public PilotCredential(String password, String username, Pilot pilot ) {

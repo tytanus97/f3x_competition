@@ -14,34 +14,31 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-public class TestController {
+@RequestMapping("/api/auth")
+public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
     private final JwtUtils jwtUtils;
 
     @Autowired
-    public TestController(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, JwtUtils jwtUtils) {
+    public AuthController(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.jwtUtils = jwtUtils;
     }
 
 
-    @GetMapping("/test")
-    public String getHello() {
-        return "Hello udalo ci sie dostac do tego endpointu";
-    }
-
     @PostMapping("/authenticate")
     public ResponseEntity<?> createAuthenticationToken(@RequestBody AuthenticationRequest authenticationRequest)
             throws Exception {
-
+        System.out.println(authenticationRequest.toString());
         try {
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getUsername(), authenticationRequest.getPassword()));
         } catch (BadCredentialsException exc) {
             throw new Exception("Incorrect username or password", exc);
+
         }
 
         final UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());

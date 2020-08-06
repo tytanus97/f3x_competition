@@ -11,6 +11,7 @@ import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.PlaneService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,14 +25,16 @@ public class PilotServiceImpl implements PilotService {
     private final PlaneService planeService;
     private final PilotCredentialRepository pilotCredentialRepository;
     private final ModelMapper modelMapper;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Autowired
-    public PilotServiceImpl(PilotRepository pilotRepository, PlaneService planeService, PilotCredentialRepository pilotCredentialRepository, ModelMapper modelMapper) {
+    public PilotServiceImpl(PilotRepository pilotRepository, PlaneService planeService, PilotCredentialRepository pilotCredentialRepository, ModelMapper modelMapper, PasswordEncoder passwordEncoder) {
         this.pilotRepository = pilotRepository;
         this.planeService = planeService;
         this.pilotCredentialRepository = pilotCredentialRepository;
         this.modelMapper = modelMapper;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -85,14 +88,22 @@ public class PilotServiceImpl implements PilotService {
             for(Plane plane: pilot.getPilotPlanes()) {
                 this.planeService.delete(plane);
             }
+            this.pilotCredentialRepository.deleteByPilot(pilot);
         this.pilotRepository.delete(pilot);
     }
 
     @Override
     @Transactional
-    public Pilot findByUserName(String username) {
+    public Pilot findByUsername(String username) {
         PilotCredential credential = this.pilotCredentialRepository.findByUsername(username);
-        return credential.getPilot();
+        return credential != null? credential.getPilot():null;
+    }
+
+    @Override
+    @Transactional
+    public PilotCredential savePilotCredential(PilotCredential pilotCredential) {
+        pilotCredential.setPassword(passwordEncoder.encode(pilotCredential.getPassword()));
+        return this.pilotCredentialRepository.save(pilotCredential);
     }
 
 

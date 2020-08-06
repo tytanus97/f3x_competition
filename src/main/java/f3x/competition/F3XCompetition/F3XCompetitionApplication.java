@@ -1,20 +1,18 @@
 package f3x.competition.F3XCompetition;
 
+import f3x.competition.F3XCompetition.entity.Country;
 import f3x.competition.F3XCompetition.entity.PilotCredential;
 import f3x.competition.F3XCompetition.repository.CountryRepository;
-import f3x.competition.F3XCompetition.repository.LocationRepository;
 import f3x.competition.F3XCompetition.repository.PilotCredentialRepository;
 import f3x.competition.F3XCompetition.utils.ImagesUploadLocation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -26,6 +24,8 @@ public class F3XCompetitionApplication {
 
 	@Autowired
 	private PilotCredentialRepository pilotCredentialRepository;
+	@Autowired
+	private CountryRepository countryRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -44,8 +44,18 @@ public class F3XCompetitionApplication {
 				new PilotCredential(this.passwordEncoder.encode("test"),"test")
 
 		).collect(Collectors.toList());
-		this.pilotCredentialRepository.deleteAll();
-		this.pilotCredentialRepository.saveAll(pilotCredentialsList);
+
+		List<Country> countryList = Stream.of(
+				new Country(0L,"Polska","POL"),
+				new Country(0L,"Niemcy","GER"),
+				new Country(0L,"Czechy","CZE")
+		).collect(Collectors.toList());
+
+		//this.pilotCredentialRepository.deleteAll();
+		//this.countryRepository.deleteAll();
+
+	//	this.countryRepository.saveAll(countryList);
+		//this.pilotCredentialRepository.saveAll(pilotCredentialsList);
 	}
 
 }
