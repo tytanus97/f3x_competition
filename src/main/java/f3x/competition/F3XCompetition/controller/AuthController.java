@@ -14,6 +14,9 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -41,14 +44,14 @@ public class AuthController {
             this.authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(
                     authenticationRequest.getUsername(), authenticationRequest.getPassword()));
         } catch (BadCredentialsException exc) {
-            throw new Exception("Incorrect username or password", exc);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
 
         }
 
         final UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtUtils.generateToken(userDetails);
-        final Pilot pilot = this.pilotService.findByUsername(authenticationRequest.getUsername());
-        return new ResponseEntity<>(new AuthenticationResponse(jwt,pilot.getPilotId()), HttpStatus.OK);
+        final Optional<Pilot> tmpPilot = this.pilotService.findByUsername(authenticationRequest.getUsername());
+        return tmpPilot.map(pilot -> new ResponseEntity<>(new AuthenticationResponse(jwt, pilot.getPilotId()), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
 
