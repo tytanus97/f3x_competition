@@ -51,7 +51,7 @@ public class PilotServiceImpl implements PilotService {
 
     @Override
     @Transactional
-    public Pilot getPilotByEmail(String email) {
+    public Optional<Pilot> getPilotByEmail(String email) {
         return this.pilotRepository.getByPilotEmail(email);
     }
 
@@ -94,9 +94,9 @@ public class PilotServiceImpl implements PilotService {
 
     @Override
     @Transactional
-    public Pilot findByUsername(String username) {
+    public Optional<Pilot> findByUsername(String username) {
         PilotCredential credential = this.pilotCredentialRepository.findByUsername(username);
-        return credential != null? credential.getPilot():null;
+        return credential != null? Optional.of(credential.getPilot()): Optional.empty();
     }
 
     @Override

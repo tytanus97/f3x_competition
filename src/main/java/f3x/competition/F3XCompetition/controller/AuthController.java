@@ -1,7 +1,9 @@
 package f3x.competition.F3XCompetition.controller;
 
+import f3x.competition.F3XCompetition.entity.Pilot;
 import f3x.competition.F3XCompetition.request.AuthenticationRequest;
 import f3x.competition.F3XCompetition.response.AuthenticationResponse;
+import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.serviceImpl.CustomUserDetailsService;
 import f3x.competition.F3XCompetition.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,12 +21,14 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final CustomUserDetailsService userDetailsService;
+    private final PilotService pilotService;
     private final JwtUtils jwtUtils;
 
     @Autowired
-    public AuthController(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, JwtUtils jwtUtils) {
+    public AuthController(AuthenticationManager authenticationManager, CustomUserDetailsService userDetailsService, PilotService pilotService, JwtUtils jwtUtils) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
+        this.pilotService = pilotService;
         this.jwtUtils = jwtUtils;
     }
 
@@ -43,8 +47,8 @@ public class AuthController {
 
         final UserDetails userDetails = this.userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         final String jwt = jwtUtils.generateToken(userDetails);
-
-        return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.OK);
+        final Pilot pilot = this.pilotService.findByUsername(authenticationRequest.getUsername());
+        return new ResponseEntity<>(new AuthenticationResponse(jwt,pilot.getPilotId()), HttpStatus.OK);
     }
 
 

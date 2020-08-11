@@ -50,22 +50,36 @@ public class PilotController {
     }
 
     @GetMapping("/{pilotId}")
-    public ResponseEntity<Optional<Pilot>> getById(@PathVariable Long pilotId) {
-        return new ResponseEntity<>(this.pilotService.getById(pilotId), HttpStatus.OK);
+    public ResponseEntity<PilotDTO> getById(@PathVariable Long pilotId) {
+        System.out.println(pilotId);
+        Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
+        if(tmpPilot.isPresent()) {
+            PilotDTO pilotDTO =  ((PilotServiceImpl)this.pilotService).pilotToPilotDTO(tmpPilot.get());
+            return new ResponseEntity<>(pilotDTO, HttpStatus.OK);
+        }
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/email")
-    public ResponseEntity<Pilot> getByEmail(@RequestParam("email") String email) {
+    public ResponseEntity<PilotDTO> getByEmail(@RequestParam("email") String email) {
         if (!email.isEmpty()) {
-            return new ResponseEntity<>(this.pilotService.getPilotByEmail(email), HttpStatus.OK);
+            Optional<Pilot> tmpPilot = this.pilotService.getPilotByEmail(email);
+            if(tmpPilot.isPresent()) {
+                PilotDTO pilotDTO = ((PilotServiceImpl)this.pilotService).pilotToPilotDTO(tmpPilot.get());
+                return new ResponseEntity<>(pilotDTO, HttpStatus.OK);
+            }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
     @GetMapping("/username")
-    public ResponseEntity<Pilot> getByUsername(@RequestParam("username") String username) {
+    public ResponseEntity<PilotDTO> getByUsername(@RequestParam("username") String username) {
         if (!username.isEmpty()) {
-            return new ResponseEntity<>(this.pilotService.findByUsername(username), HttpStatus.OK);
+            Optional<Pilot> tmpPilot = this.pilotService.findByUsername(username);
+            if(tmpPilot.isPresent()) {
+                PilotDTO pilotDTO = ((PilotServiceImpl)this.pilotService).pilotToPilotDTO(tmpPilot.get());
+                return new ResponseEntity<>(pilotDTO, HttpStatus.OK);
+            }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }

@@ -10,12 +10,12 @@ import java.util.Optional;
 public interface PilotService {
     List<Pilot> getAll();
     Optional<Pilot> getById(Long pilotId);
-    Pilot getPilotByEmail(String email);
+    Optional<Pilot> getPilotByEmail(String email);
     Pilot savePilot(Pilot pilot);
     void addPlaneToPilot(Pilot pilot, Plane plane);
     void removePlaneFromPilot(Pilot pilot,Plane plane);
     void delete(Pilot pilot);
-    Pilot findByUsername(String username);
+    Optional<Pilot> findByUsername(String username);
     PilotCredential savePilotCredential(PilotCredential pilotCredential);
 
 }
