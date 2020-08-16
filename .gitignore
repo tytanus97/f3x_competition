@@ -5,6 +5,7 @@ target/
 !**/src/test/**
 !media
 !media/*
+!data
 
 ### STS ###
 .apt_generated
