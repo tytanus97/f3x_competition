@@ -5,15 +5,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import f3x.competition.F3XCompetition.dto.PilotDTO;
 import f3x.competition.F3XCompetition.dto.PlaneDTO;
 import f3x.competition.F3XCompetition.entity.*;
-import f3x.competition.F3XCompetition.repository.PlaneRepository;
 import f3x.competition.F3XCompetition.service.ImageService;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.PlaneService;
 import f3x.competition.F3XCompetition.serviceImpl.PilotServiceImpl;
 import f3x.competition.F3XCompetition.serviceImpl.PlaneServiceImpl;
-import org.modelmapper.ModelMapper;
+import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpOutputMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -82,6 +80,13 @@ public class PilotController {
             }
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    }
+
+    @GetMapping("/country")
+    public ResponseEntity<List<PilotDTO>> findPilotsByCountryName(@RequestParam("countryName") String countryName) {
+        return this.pilotService.findAllByCountryName(countryName).map(pilots ->
+            new ResponseEntity<>(pilots.stream().map(((PilotServiceImpl)this.pilotService)::pilotToPilotDTO).collect(Collectors.toList()),HttpStatus.OK))
+                .orElse(new ResponseEntity<>(null,HttpStatus.OK));
     }
 
     @GetMapping("/{pilotId}/country")

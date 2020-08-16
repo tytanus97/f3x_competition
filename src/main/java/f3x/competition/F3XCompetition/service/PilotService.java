@@ -18,4 +18,5 @@ public interface PilotService {
     Optional<Pilot> findByUsername(String username);
     PilotCredential savePilotCredential(PilotCredential pilotCredential);
 
+    Optional<List<Pilot>> findAllByCountryName(String countryName);
 }
