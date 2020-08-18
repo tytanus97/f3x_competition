@@ -1,13 +1,16 @@
 package f3x.competition.F3XCompetition.controller;
 
+import f3x.competition.F3XCompetition.dto.LocationDTO;
 import f3x.competition.F3XCompetition.entity.Location;
 import f3x.competition.F3XCompetition.service.LocationService;
+import f3x.competition.F3XCompetition.serviceImpl.LocationServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/locations")
@@ -21,10 +24,10 @@ public class LocationController {
     }
 
     @GetMapping("/")
-    public ResponseEntity<List<Location>> findAllLocations(@RequestParam(value = "country",required = false)String countryName) {
-
-
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity<List<LocationDTO>> findAllLocations() {
+        List<Location> locations = this.locationService.findAll();
+        return new ResponseEntity<>(locations.stream().map(((LocationServiceImpl) this.locationService)::locationToLocationDTO)
+                .collect(Collectors.toList()),HttpStatus.OK);
     }
 
     @GetMapping("/{locationId}")
@@ -34,8 +37,10 @@ public class LocationController {
     }
 
     @PostMapping("/")
-    public ResponseEntity addLocation(@RequestBody Location location) {
+    public ResponseEntity addLocation(@RequestBody LocationDTO locationDTO) {
+        System.out.println(locationDTO.toString());
 
+        this.locationService.save(((LocationServiceImpl)this.locationService).locationDTOtoLocation(locationDTO));
         return new ResponseEntity(HttpStatus.OK);
     }
 
