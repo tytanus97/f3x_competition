@@ -3,6 +3,7 @@ package f3x.competition.F3XCompetition;
 import f3x.competition.F3XCompetition.entity.Country;
 import f3x.competition.F3XCompetition.entity.PilotCredential;
 import f3x.competition.F3XCompetition.repository.CountryRepository;
+import f3x.competition.F3XCompetition.repository.LocationRepository;
 import f3x.competition.F3XCompetition.repository.PilotCredentialRepository;
 import f3x.competition.F3XCompetition.utils.ImagesUploadLocation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class F3XCompetitionApplication {
 	private PilotCredentialRepository pilotCredentialRepository;
 	@Autowired
 	private CountryRepository countryRepository;
+
+	@Autowired
+	private LocationRepository locationRepository;
 
 	@Autowired
 	private PasswordEncoder passwordEncoder;
@@ -53,8 +57,8 @@ public class F3XCompetitionApplication {
 
 		//this.pilotCredentialRepository.deleteAll();
 		//this.countryRepository.deleteAll();
-
-	//	this.countryRepository.saveAll(countryList);
+		this.locationRepository.deleteAll();
+		//this.countryRepository.saveAll(countryList);
 		//this.pilotCredentialRepository.saveAll(pilotCredentialsList);
 	}
 

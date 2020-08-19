@@ -12,30 +12,23 @@ import java.util.List;
 
 @Entity
 @Table(name="event")
-@JsonIgnoreProperties(ignoreUnknown = true)
 public class Event {
+
     @Id
     @Column(name="event_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "event_id_generator")
     @SequenceGenerator(name="event_id_generator",initialValue = 1,sequenceName = "event_id_seq")
-    @JsonProperty
     private Long eventId;
 
     @Column(name="event_round_count")
-    @JsonProperty
     private byte eventRoundCount;
 
-    @Column(name="event_pilot_count")
-    @JsonProperty
-    private int eventPilotCount;
 
     @Column(name="event_name")
-    @JsonProperty
     private String eventName;
 
     @ManyToOne
     @JoinColumn(name="location_id")
-    @JsonIgnore
     private Location location;
 
     @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
@@ -45,36 +38,31 @@ public class Event {
     private List<Pilot> pilotList;
 
     @OneToMany(mappedBy = "event",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.REMOVE,CascadeType.PERSIST})
-    @JsonIgnore
     private List<Round> roundList;
 
-    @ManyToOne
-    @JoinColumn(name="competition_class_id")
-    @JsonIgnore
-    private CompetitionClass competitionClass;
+    @Column(name="registration_open")
+    private boolean registrationOpen;
 
     @Column(name="start_date")
-    @JsonIgnore
     private Timestamp startDate = new Timestamp(System.currentTimeMillis());
 
     @Column(name="end_date")
-    @JsonIgnore
     private Timestamp endDate = new Timestamp(System.currentTimeMillis()+36000);
 
     public Event() {
     }
 
-    public Event(int eventPilotCount, byte eventRoundCount, String eventName, Location location, List<Pilot> pilotList,
-                 List<Round> roundList, CompetitionClass competitionClass, Timestamp startDate, Timestamp endDate) {
+    public Event(byte eventRoundCount, String eventName, Location location, List<Pilot> pilotList,
+                 List<Round> roundList, Timestamp startDate, Timestamp endDate,boolean registrationOpen) {
+
         this.eventRoundCount = eventRoundCount;
         this.eventName = eventName;
         this.location = location;
         this.pilotList = pilotList;
         this.roundList = roundList;
-        this.competitionClass = competitionClass;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.eventPilotCount = eventPilotCount;
+        this.registrationOpen = registrationOpen;
     }
 
     public List<Round> getRoundList() {
@@ -154,14 +142,6 @@ public class Event {
         this.location = location;
     }
 
-    public CompetitionClass getCompetitionClass() {
-        return competitionClass;
-    }
-
-    public void setCompetitionClass(CompetitionClass competitionClass) {
-        this.competitionClass = competitionClass;
-    }
-
     public Timestamp getStartDate() {
         return startDate;
     }
@@ -178,25 +158,12 @@ public class Event {
         this.endDate = endDate;
     }
 
-    public int getEventPilotCount() {
-        return eventPilotCount;
+    public boolean isRegistrationOpen() {
+        return registrationOpen;
     }
 
-    public void setEventPilotCount(int eventPilotCount) {
-        this.eventPilotCount = eventPilotCount;
+    public void setRegistrationOpen(boolean registrationOpen) {
+        this.registrationOpen = registrationOpen;
     }
 
-    @Override
-    public String toString() {
-        return "Event{" +
-                "eventId=" + eventId +
-                ", eventRoundCount=" + eventRoundCount +
-                ", eventPilotCount=" + eventPilotCount +
-                ", eventName='" + eventName + '\'' +
-                ", location=" + location +
-                ", competitionClass=" + competitionClass +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
-                '}';
-    }
 }

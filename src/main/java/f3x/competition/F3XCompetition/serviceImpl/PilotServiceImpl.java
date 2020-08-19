@@ -106,6 +106,12 @@ public class PilotServiceImpl implements PilotService {
         return this.pilotCredentialRepository.save(pilotCredential);
     }
 
+    @Override
+    @Transactional
+    public Optional<List<Pilot>> findAllByCountryName(String countryName) {
+        return this.pilotRepository.findAllByCountry_CountryName(countryName);
+    }
+
 
     public PilotDTO pilotToPilotDTO(Pilot pilot) {
         return modelMapper.map(pilot,PilotDTO.class);

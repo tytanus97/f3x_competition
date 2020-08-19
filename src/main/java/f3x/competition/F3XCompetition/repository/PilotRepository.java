@@ -10,4 +10,5 @@ import java.util.Optional;
 @Repository
 public interface PilotRepository extends JpaRepository<Pilot,Long> {
     Optional<Pilot> getByPilotEmail(String pilotEmail);
+    Optional<List<Pilot>> findAllByCountry_CountryName(String countryName);
 }
