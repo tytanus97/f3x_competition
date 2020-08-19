@@ -13,7 +13,7 @@ public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "location_id_generator")
-    @SequenceGenerator(name="location_id_generator",initialValue = 1,sequenceName = "location_id_seq")
+    @SequenceGenerator(name="location_id_generator",initialValue = 1,sequenceName = "location_id_seq",allocationSize = 1)
     @Column(name="location_id")
     @JsonProperty
     private Long locationId;

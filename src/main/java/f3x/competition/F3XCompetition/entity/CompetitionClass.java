@@ -12,7 +12,7 @@ public class CompetitionClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "competition_class_id_generator")
-    @SequenceGenerator(name="competition_class_id_generator",initialValue = 1,sequenceName = "competition_class_id_seq")
+    @SequenceGenerator(name="competition_class_id_generator",initialValue = 1,sequenceName = "competition_class_id_seq",allocationSize = 1)
     @Column(name="competition_class_id")
     @JsonProperty
     private Long competitionClassId;

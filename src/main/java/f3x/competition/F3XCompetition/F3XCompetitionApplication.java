@@ -56,9 +56,10 @@ public class F3XCompetitionApplication {
 		).collect(Collectors.toList());
 
 		//this.pilotCredentialRepository.deleteAll();
+
+		//this.locationRepository.deleteAll();
 		//this.countryRepository.deleteAll();
-		this.locationRepository.deleteAll();
-		//this.countryRepository.saveAll(countryList);
+		this.countryRepository.saveAll(countryList);
 		//this.pilotCredentialRepository.saveAll(pilotCredentialsList);
 	}
 

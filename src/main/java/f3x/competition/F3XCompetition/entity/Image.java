@@ -12,7 +12,7 @@ public class Image {
     @Id
     @Column(name="image_id")
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "image_id_generator")
-    @SequenceGenerator(name="image_id_generator",initialValue = 1,sequenceName = "image_id_seq")
+    @SequenceGenerator(name="image_id_generator",initialValue = 1,sequenceName = "image_id_seq",allocationSize = 1)
     @JsonProperty
     private Long imageId;
 

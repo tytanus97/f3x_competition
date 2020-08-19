@@ -11,7 +11,7 @@ import javax.persistence.*;
 public class Task {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "task_id_generator")
-    @SequenceGenerator(name="task_id_generator",initialValue = 1,sequenceName = "task_id_seq")
+    @SequenceGenerator(name="task_id_generator",initialValue = 1,sequenceName = "task_id_seq",allocationSize = 1)
     @Column(name="task_id")
     @JsonProperty
     private Long taskId;

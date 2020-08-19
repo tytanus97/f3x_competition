@@ -15,7 +15,7 @@ import java.util.List;
 public class Pilot {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "pilot_id_generator")
-    @SequenceGenerator(name="pilot_id_generator",initialValue = 1,sequenceName = "pilot_id_seq")
+    @SequenceGenerator(name="pilot_id_generator",initialValue = 1,sequenceName = "pilot_id_seq",allocationSize = 1)
     @Column(name="pilot_id")
     @JsonProperty
     private Long pilotId;

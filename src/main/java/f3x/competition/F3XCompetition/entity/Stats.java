@@ -13,7 +13,7 @@ public class Stats {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "stats_id_generator")
-    @SequenceGenerator(name="stats_id_generator",initialValue = 1,sequenceName = "stats_id_seq")
+    @SequenceGenerator(name="stats_id_generator",initialValue = 1,sequenceName = "stats_id_seq",allocationSize = 1)
     @Column(name="stats_id")
     @JsonProperty
     private Long statsId;

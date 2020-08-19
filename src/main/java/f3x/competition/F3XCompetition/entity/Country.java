@@ -12,7 +12,7 @@ public class Country {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "country_id_generator")
-    @SequenceGenerator(name="country_id_generator",initialValue = 1,sequenceName = "country_id_seq")
+    @SequenceGenerator(name="country_id_generator",initialValue = 1,sequenceName = "country_id_seq",allocationSize = 1)
     @Column(name="country_id")
     @JsonProperty
     private Long countryId;

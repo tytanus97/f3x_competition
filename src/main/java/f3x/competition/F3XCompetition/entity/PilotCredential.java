@@ -10,7 +10,7 @@ public class PilotCredential {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "pilot_credential_id_generator")
-    @SequenceGenerator(name="pilot_credential_id_generator",initialValue = 1,sequenceName = "pilot_credential_id_seq")
+    @SequenceGenerator(name="pilot_credential_id_generator",initialValue = 1,sequenceName = "pilot_credential_id_seq",allocationSize = 1)
     private Long credentialId;
 
     @Column(name="password")

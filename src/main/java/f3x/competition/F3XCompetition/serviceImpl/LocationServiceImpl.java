@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class LocationServiceImpl implements LocationService {
@@ -33,6 +34,12 @@ public class LocationServiceImpl implements LocationService {
     @Transactional
     public List<Location> findAll() {
         return this.locationRepository.findAll();
+    }
+
+    @Override
+    @Transactional
+    public Optional<Location> findById(Long locationId) {
+        return this.locationRepository.findById(locationId);
     }
 
 

@@ -16,7 +16,7 @@ public class Round {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "round_id_generator")
-    @SequenceGenerator(name="round_id_generator",initialValue = 1,sequenceName = "round_id_seq")
+    @SequenceGenerator(name="round_id_generator",initialValue = 1,sequenceName = "round_id_seq",allocationSize = 1)
     @Column(name="round_id")
     @JsonProperty
     private Long roundId;

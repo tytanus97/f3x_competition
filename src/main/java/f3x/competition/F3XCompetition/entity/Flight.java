@@ -13,7 +13,7 @@ public class Flight {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "flight_id_generator")
-    @SequenceGenerator(name="flight_id_generator",initialValue = 1,sequenceName = "flight_id_seq")
+    @SequenceGenerator(name="flight_id_generator",initialValue = 1,sequenceName = "flight_id_seq",allocationSize = 1)
     @Column(name="flight_id")
     @JsonProperty
     private Long flightId;

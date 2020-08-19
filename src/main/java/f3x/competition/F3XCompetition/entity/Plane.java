@@ -11,7 +11,7 @@ public class Plane {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "plane_id_generator")
-    @SequenceGenerator(name="plane_id_generator",initialValue = 1,sequenceName = "plane_id_seq")
+    @SequenceGenerator(name="plane_id_generator",initialValue = 1,sequenceName = "plane_id_seq",allocationSize = 1)
     @Column(name="plane_id")
     private Long planeId;
 
