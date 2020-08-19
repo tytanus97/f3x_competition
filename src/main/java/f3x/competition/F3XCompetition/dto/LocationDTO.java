@@ -2,6 +2,9 @@ package f3x.competition.F3XCompetition.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import f3x.competition.F3XCompetition.entity.Country;
+import f3x.competition.F3XCompetition.entity.Image;
+
+import java.util.List;
 
 public class LocationDTO {
 
@@ -13,7 +16,7 @@ public class LocationDTO {
     private String locationName;
 
     @JsonProperty
-    private String lattitude;
+    private String latitude;
 
     @JsonProperty
     private String longitude;
@@ -21,15 +24,19 @@ public class LocationDTO {
     @JsonProperty
     private Country country;
 
+    private List<Image> imageList;
+
     public LocationDTO() {
     }
 
-    public LocationDTO(Long locationId, String locationName, String latitude, String longitude, Country country) {
+
+    public LocationDTO(Long locationId, String locationName, String latitude, String longitude, Country country, List<Image> imageList) {
         this.locationId = locationId;
         this.locationName = locationName;
-        this.lattitude = latitude;
+        this.latitude = latitude;
         this.longitude = longitude;
         this.country = country;
+        this.imageList = imageList;
     }
 
     public Long getLocationId() {
@@ -49,11 +56,11 @@ public class LocationDTO {
     }
 
     public String getLatitude() {
-        return lattitude;
+        return latitude;
     }
 
     public void setLatitude(String latitude) {
-        this.lattitude = latitude;
+        this.latitude = latitude;
     }
 
     public String getLongitude() {
@@ -72,12 +79,28 @@ public class LocationDTO {
         this.country = country;
     }
 
+    public String getLattitude() {
+        return latitude;
+    }
+
+    public void setLattitude(String lattitude) {
+        this.latitude = lattitude;
+    }
+
+    public List<Image> getImageList() {
+        return imageList;
+    }
+
+    public void setImageList(List<Image> imageList) {
+        this.imageList = imageList;
+    }
+
     @Override
     public String toString() {
         return "LocationDTO{" +
                 "locationId=" + locationId +
                 ", locationName='" + locationName + '\'' +
-                ", latitude='" + lattitude + '\'' +
+                ", latitude='" + latitude + '\'' +
                 ", longitude='" + longitude + '\'' +
                 ", country=" + country +
                 '}';

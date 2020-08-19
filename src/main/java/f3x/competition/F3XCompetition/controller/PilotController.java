@@ -119,8 +119,8 @@ public class PilotController {
 
     @GetMapping("/{pilotId}/planes/{planeId}")
     public ResponseEntity<PlaneDTO> getPilotPlane(@PathVariable Long pilotId, @PathVariable Long planeId) {
-        Optional<Plane> tmpPlane = this.planeService.getById(planeId);
 
+        Optional<Plane> tmpPlane = this.planeService.getById(planeId);
         if (tmpPlane.isPresent()) {
             Plane plane = tmpPlane.get();
             PlaneDTO planeDTO = ((PlaneServiceImpl) this.planeService).planeToPlaneDTO(plane);

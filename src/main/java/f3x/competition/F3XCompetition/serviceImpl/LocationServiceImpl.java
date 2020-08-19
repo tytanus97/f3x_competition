@@ -26,8 +26,8 @@ public class LocationServiceImpl implements LocationService {
 
     @Override
     @Transactional
-    public void save(Location location) {
-            this.locationRepository.save(location);
+    public Location save(Location location) {
+            return this.locationRepository.save(location);
     }
 
     @Override
