@@ -1,14 +1,13 @@
 package f3x.competition.F3XCompetition.controller;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import f3x.competition.F3XCompetition.dto.LocationDTO;
 import f3x.competition.F3XCompetition.entity.Image;
 import f3x.competition.F3XCompetition.entity.Location;
-import f3x.competition.F3XCompetition.entity.Plane;
 import f3x.competition.F3XCompetition.service.ImageService;
 import f3x.competition.F3XCompetition.service.LocationService;
 import f3x.competition.F3XCompetition.serviceImpl.LocationServiceImpl;
-import io.swagger.models.Response;
-import org.aspectj.weaver.patterns.HasThisTypePatternTriedToSneakInSomeGenericOrParameterizedTypePatternMatchingStuffAnywhereVisitor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,11 +25,13 @@ public class LocationController {
 
     private final LocationService locationService;
     private final ImageService imageService;
+    private final ObjectMapper objectMapper;
 
     @Autowired
-    public LocationController(LocationService locationService, ImageService imageService) {
+    public LocationController(LocationService locationService, ImageService imageService, ObjectMapper objectMapper) {
         this.locationService = locationService;
         this.imageService = imageService;
+        this.objectMapper = objectMapper;
     }
 
     @GetMapping("/")
@@ -55,8 +56,16 @@ public class LocationController {
     }
 
     @PostMapping("/")
-    public ResponseEntity addLocation(@RequestBody LocationDTO locationDTO,
+    public ResponseEntity addLocation(@RequestParam("location") String locationJSON,
                                       @RequestParam("locationImages") List<MultipartFile> locationImages) {
+
+        LocationDTO locationDTO = null;
+        try {
+            locationDTO = objectMapper.readValue(locationJSON, LocationDTO.class);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
 
         Location savedLocation = this.locationService.save(((LocationServiceImpl)this.locationService).locationDTOtoLocation(locationDTO));
         if(savedLocation != null) {

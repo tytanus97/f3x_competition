@@ -24,6 +24,7 @@ public class LocationDTO {
     @JsonProperty
     private Country country;
 
+    @JsonProperty
     private List<Image> imageList;
 
     public LocationDTO() {
