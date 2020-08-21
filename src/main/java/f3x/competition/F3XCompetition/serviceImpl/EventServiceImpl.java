@@ -1,5 +1,7 @@
 package f3x.competition.F3XCompetition.serviceImpl;
 
+import f3x.competition.F3XCompetition.dto.EventDTO;
+import f3x.competition.F3XCompetition.dto.PilotDTO;
 import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Pilot;
 import f3x.competition.F3XCompetition.entity.Round;
@@ -7,10 +9,13 @@ import f3x.competition.F3XCompetition.repository.EventRepository;
 import f3x.competition.F3XCompetition.service.EventService;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.RoundService;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,12 +25,14 @@ public class EventServiceImpl implements EventService {
     private final EventRepository eventRepository;
     private final PilotService pilotService;
     private final RoundService roundService;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public EventServiceImpl(EventRepository eventRepository, PilotService pilotService, RoundService roundService) {
+    public EventServiceImpl(EventRepository eventRepository, PilotService pilotService, RoundService roundService, ModelMapper modelMapper) {
         this.eventRepository = eventRepository;
         this.pilotService = pilotService;
         this.roundService = roundService;
+        this.modelMapper = modelMapper;
     }
 
     @Override
@@ -42,8 +49,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public void saveEvent(Event event) {
-        this.eventRepository.save(event);
+    public Event saveEvent(Event event) {
+        return this.eventRepository.save(event);
     }
 
     @Override
@@ -91,5 +98,37 @@ public class EventServiceImpl implements EventService {
             this.pilotService.savePilot(p);
         });
         this.eventRepository.delete(event);
+    }
+
+    @PostConstruct
+    private void config() {
+
+        this.modelMapper.typeMap(EventDTO.class,Event.class)
+                .addMapping(EventDTO::getPilotDirector,Event::setPilotDirector);
+
+        this.modelMapper.typeMap(Event.class,EventDTO.class)
+                .addMapping(Event::getPilotDirector,EventDTO::setPilotDirector);
+
+       /* PropertyMap<EventDTO, Event> pilotMap = new PropertyMap<EventDTO,Event>() {
+            @Override
+            protected void configure() {
+                map().setPilotDirector((((PilotServiceImpl)pilotService).pilotDTOtoPilot(source.getPilotDirector())));
+            }
+        };
+        PropertyMap<Event, EventDTO> pilotMapReverse = new PropertyMap<Event, EventDTO>() {
+            @Override
+            protected void configure() {
+                map().setPilotDirector((((PilotServiceImpl)pilotService).pilotToPilotDTO(source.getPilotDirector())));
+            }
+        };
+        this.modelMapper.addMappings(pilotMap);*/
+    }
+
+    public Event eventDTOtoEvent(EventDTO eventDTO) {
+        return this.modelMapper.map(eventDTO,Event.class);
+    }
+
+    public EventDTO eventToEventDTO(Event event) {
+        return this.modelMapper.map(event,EventDTO.class);
     }
 }

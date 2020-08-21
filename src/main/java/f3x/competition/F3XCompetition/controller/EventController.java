@@ -1,10 +1,12 @@
 package f3x.competition.F3XCompetition.controller;
 
+import f3x.competition.F3XCompetition.dto.EventDTO;
 import f3x.competition.F3XCompetition.entity.*;
 import f3x.competition.F3XCompetition.service.EventService;
 import f3x.competition.F3XCompetition.service.FlightService;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.RoundService;
+import f3x.competition.F3XCompetition.serviceImpl.EventServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -80,8 +82,11 @@ public class EventController {
     }
 
     @PostMapping("/")
-    public void addEvent(@RequestBody Event event) {
-        this.eventService.saveEvent(event);
+    public ResponseEntity<EventDTO> addEvent(@RequestBody EventDTO eventDTO) {
+        Event event = ((EventServiceImpl)this.eventService).eventDTOtoEvent(eventDTO);
+        EventDTO resultEventDTO = ((EventServiceImpl)this.eventService).eventToEventDTO(this.eventService.saveEvent(event));
+        System.out.println(resultEventDTO.getPilotDirector().toString());
+        return new ResponseEntity<>(resultEventDTO,HttpStatus.OK);
     }
 
     @PostMapping("/{eventId}/pilots")

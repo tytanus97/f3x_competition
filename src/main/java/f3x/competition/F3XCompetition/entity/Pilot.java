@@ -17,40 +17,31 @@ public class Pilot {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "pilot_id_generator")
     @SequenceGenerator(name="pilot_id_generator",initialValue = 1,sequenceName = "pilot_id_seq",allocationSize = 1)
     @Column(name="pilot_id")
-    @JsonProperty
     private Long pilotId;
 
     @Column(name="pilot_first_name")
-    @JsonProperty
     private String pilotFirstName;
 
     @Column(name="pilot_last_name")
-    @JsonProperty
     private String pilotLastName;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "country_id")
-    @JsonProperty
     private Country country;
 
     @Column(name="pilot_birth_date")
-    @JsonProperty
     private LocalDate pilotBirthDate;
 
     @Column(name="pilot_email")
-    @JsonProperty
     private String pilotEmail;
 
     @Column(name="pilot_rating")
-    @JsonProperty(defaultValue = "0")
     private float pilotRating;
 
     @OneToMany(mappedBy = "pilot",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.PERSIST,CascadeType.REMOVE})
-    @JsonIgnore
     private List<Plane> pilotPlanes;
 
     @ManyToMany(mappedBy = "pilotList",fetch = FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
-    @JsonIgnore
     private List<Event> pilotEvents;
 
     public Pilot() {

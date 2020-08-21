@@ -35,7 +35,6 @@ public class Event {
     @ManyToMany(fetch = FetchType.LAZY,cascade = {CascadeType.MERGE, CascadeType.PERSIST,CascadeType.REFRESH})
     @JoinTable(name="pilot_event",joinColumns = {@JoinColumn(name="event_id")},
     inverseJoinColumns = {@JoinColumn(name="pilot_id")})
-    @JsonIgnore
     private List<Pilot> pilotList;
 
     @OneToMany(mappedBy = "event",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.REMOVE,CascadeType.PERSIST})
@@ -49,16 +48,17 @@ public class Event {
     private Pilot pilotDirector;
 
     @Column(name="start_date")
-    private LocalDate startDate = LocalDate.now();
+    private LocalDate startDate;
 
     @Column(name="end_date")
-    private LocalDate endDate = LocalDate.now();
+    private LocalDate endDate;
 
     public Event() {
     }
 
     public Event(byte eventRoundCount, String eventName, Location location, List<Pilot> pilotList,
-                 List<Round> roundList, LocalDate startDate, LocalDate endDate,boolean registrationOpen) {
+                 List<Round> roundList, LocalDate startDate, LocalDate endDate,
+                 boolean registrationOpen,Pilot pilotDirector) {
 
         this.eventRoundCount = eventRoundCount;
         this.eventName = eventName;
@@ -68,6 +68,7 @@ public class Event {
         this.startDate = startDate;
         this.endDate = endDate;
         this.registrationOpen = registrationOpen;
+        this.pilotDirector = pilotDirector;
     }
 
     public List<Round> getRoundList() {
@@ -165,6 +166,14 @@ public class Event {
 
     public boolean isRegistrationOpen() {
         return registrationOpen;
+    }
+
+    public Pilot getPilotDirector() {
+        return pilotDirector;
+    }
+
+    public void setPilotDirector(Pilot pilotDirector) {
+        this.pilotDirector = pilotDirector;
     }
 
     public void setRegistrationOpen(boolean registrationOpen) {
