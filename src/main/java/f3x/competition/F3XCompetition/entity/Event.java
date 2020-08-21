@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
 import java.sql.Timestamp;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,17 +44,21 @@ public class Event {
     @Column(name="registration_open")
     private boolean registrationOpen;
 
+    @ManyToOne
+    @JoinColumn(name="pilot_director_id")
+    private Pilot pilotDirector;
+
     @Column(name="start_date")
-    private Timestamp startDate = new Timestamp(System.currentTimeMillis());
+    private LocalDate startDate = LocalDate.now();
 
     @Column(name="end_date")
-    private Timestamp endDate = new Timestamp(System.currentTimeMillis()+36000);
+    private LocalDate endDate = LocalDate.now();
 
     public Event() {
     }
 
     public Event(byte eventRoundCount, String eventName, Location location, List<Pilot> pilotList,
-                 List<Round> roundList, Timestamp startDate, Timestamp endDate,boolean registrationOpen) {
+                 List<Round> roundList, LocalDate startDate, LocalDate endDate,boolean registrationOpen) {
 
         this.eventRoundCount = eventRoundCount;
         this.eventName = eventName;
@@ -142,19 +147,19 @@ public class Event {
         this.location = location;
     }
 
-    public Timestamp getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Timestamp getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Timestamp endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
     }
 

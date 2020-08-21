@@ -1,25 +1,29 @@
 package f3x.competition.F3XCompetition.dto;
 
-import java.sql.Timestamp;
+import f3x.competition.F3XCompetition.entity.Pilot;
+
+import java.time.LocalDate;
 
 public class EventDTO {
 
     private Long eventId;
     private byte eventRoundCount;
     private String eventName;
-    private Timestamp startDate;
-    private Timestamp endDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
+    private Pilot pilotDirector;
 
     public EventDTO() {
 
     }
 
-    public EventDTO(Long eventId, byte eventRoundCount, String eventName, Timestamp startDate, Timestamp endDate) {
+    public EventDTO(Long eventId, byte eventRoundCount, String eventName, LocalDate startDate, LocalDate endDate,Pilot pilotDirector) {
         this.eventId = eventId;
         this.eventRoundCount = eventRoundCount;
         this.eventName = eventName;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.pilotDirector = pilotDirector;
     }
 
     public Long getEventId() {
@@ -46,20 +50,28 @@ public class EventDTO {
         this.eventName = eventName;
     }
 
-    public Timestamp getStartDate() {
+    public LocalDate getStartDate() {
         return startDate;
     }
 
-    public void setStartDate(Timestamp startDate) {
+    public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
 
-    public Timestamp getEndDate() {
+    public LocalDate getEndDate() {
         return endDate;
     }
 
-    public void setEndDate(Timestamp endDate) {
+    public void setEndDate(LocalDate endDate) {
         this.endDate = endDate;
+    }
+
+    public Pilot getPilotDirector() {
+        return pilotDirector;
+    }
+
+    public void setPilotDirector(Pilot pilotDirector) {
+        this.pilotDirector = pilotDirector;
     }
 
     @Override
