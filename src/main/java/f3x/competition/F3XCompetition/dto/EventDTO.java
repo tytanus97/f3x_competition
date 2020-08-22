@@ -1,7 +1,7 @@
 package f3x.competition.F3XCompetition.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import f3x.competition.F3XCompetition.entity.Pilot;
+import f3x.competition.F3XCompetition.entity.Location;
 
 import java.time.LocalDate;
 
@@ -9,7 +9,9 @@ public class EventDTO {
     @JsonProperty
     private Long eventId;
     @JsonProperty
-    private byte eventRoundCount;
+    private Boolean registrationStatus;
+    @JsonProperty
+    private String eventType;
     @JsonProperty
     private String eventName;
     @JsonProperty
@@ -17,18 +19,22 @@ public class EventDTO {
     @JsonProperty
     private LocalDate endDate;
     @JsonProperty
+    private Location location;
+    @JsonProperty
     private PilotDTO pilotDirector;
 
     public EventDTO() {
 
     }
 
-    public EventDTO(Long eventId, byte eventRoundCount, String eventName, LocalDate startDate, LocalDate endDate,PilotDTO pilotDirector) {
+    public EventDTO(Long eventId, Boolean registrationStatus, String eventType, String eventName, LocalDate startDate, LocalDate endDate, Location location, PilotDTO pilotDirector) {
         this.eventId = eventId;
-        this.eventRoundCount = eventRoundCount;
+        this.registrationStatus = registrationStatus;
+        this.eventType = eventType;
         this.eventName = eventName;
         this.startDate = startDate;
         this.endDate = endDate;
+        this.location = location;
         this.pilotDirector = pilotDirector;
     }
 
@@ -40,12 +46,20 @@ public class EventDTO {
         this.eventId = eventId;
     }
 
-    public byte getEventRoundCount() {
-        return eventRoundCount;
+    public Boolean isRegistrationStatus() {
+        return registrationStatus;
     }
 
-    public void setEventRoundCount(byte eventRoundCount) {
-        this.eventRoundCount = eventRoundCount;
+    public void setRegistrationStatus(Boolean registrationStatus) {
+        this.registrationStatus = registrationStatus;
+    }
+
+    public String getEventType() {
+        return eventType;
+    }
+
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
     }
 
     public String getEventName() {
@@ -80,14 +94,25 @@ public class EventDTO {
         this.pilotDirector = pilotDirector;
     }
 
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
     @Override
     public String toString() {
         return "EventDTO{" +
                 "eventId=" + eventId +
-                ", eventRoundCount=" + eventRoundCount +
+                ", registrationStatus=" + registrationStatus +
+                ", eventType='" + eventType + '\'' +
                 ", eventName='" + eventName + '\'' +
                 ", startDate=" + startDate +
                 ", endDate=" + endDate +
+                ", location=" + location +
+                ", pilotDirector=" + pilotDirector +
                 '}';
     }
 }

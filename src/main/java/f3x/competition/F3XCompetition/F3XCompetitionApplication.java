@@ -3,6 +3,7 @@ package f3x.competition.F3XCompetition;
 import f3x.competition.F3XCompetition.entity.Country;
 import f3x.competition.F3XCompetition.entity.PilotCredential;
 import f3x.competition.F3XCompetition.repository.CountryRepository;
+import f3x.competition.F3XCompetition.repository.EventRepository;
 import f3x.competition.F3XCompetition.repository.LocationRepository;
 import f3x.competition.F3XCompetition.repository.PilotCredentialRepository;
 import f3x.competition.F3XCompetition.utils.ImagesUploadLocation;
@@ -32,6 +33,9 @@ public class F3XCompetitionApplication {
 	private LocationRepository locationRepository;
 
 	@Autowired
+	private EventRepository eventRepository;
+
+	@Autowired
 	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
@@ -48,7 +52,6 @@ public class F3XCompetitionApplication {
 				new PilotCredential(this.passwordEncoder.encode("test"),"test")
 
 		).collect(Collectors.toList());
-
 		List<Country> countryList = Stream.of(
 				new Country(0L,"Polska","POL"),
 				new Country(0L,"Niemcy","GER"),
@@ -56,7 +59,7 @@ public class F3XCompetitionApplication {
 		).collect(Collectors.toList());
 
 		//this.pilotCredentialRepository.deleteAll();
-
+		//this.eventRepository.deleteAll();
 		//this.locationRepository.deleteAll();
 		//this.countryRepository.deleteAll();
 		//this.countryRepository.saveAll(countryList);

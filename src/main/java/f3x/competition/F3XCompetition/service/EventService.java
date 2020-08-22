@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface EventService {
     List<Event> getAll();
-    Optional<Event> getById(Long eventId);
+    Optional<Event> findById(Long eventId);
     Event saveEvent(Event event);
     void removeEvent(Event event);
     void addPilotToEvent(Event event, Pilot pilot);

@@ -1,11 +1,6 @@
 package f3x.competition.F3XCompetition.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 import javax.persistence.*;
-import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,9 +16,11 @@ public class Event {
     @SequenceGenerator(name="event_id_generator",initialValue = 1,sequenceName = "event_id_seq",allocationSize = 1)
     private Long eventId;
 
-    @Column(name="event_round_count")
-    private byte eventRoundCount;
+    @Column(name="event_type")
+    private String eventType;
 
+    @Column(name="registration_status")
+    private Boolean registrationStatus;
 
     @Column(name="event_name")
     private String eventName;
@@ -40,8 +37,6 @@ public class Event {
     @OneToMany(mappedBy = "event",fetch = FetchType.LAZY,cascade = {CascadeType.DETACH,CascadeType.REMOVE,CascadeType.PERSIST})
     private List<Round> roundList;
 
-    @Column(name="registration_open")
-    private boolean registrationOpen;
 
     @ManyToOne
     @JoinColumn(name="pilot_director_id")
@@ -56,20 +51,19 @@ public class Event {
     public Event() {
     }
 
-    public Event(byte eventRoundCount, String eventName, Location location, List<Pilot> pilotList,
-                 List<Round> roundList, LocalDate startDate, LocalDate endDate,
-                 boolean registrationOpen,Pilot pilotDirector) {
-
-        this.eventRoundCount = eventRoundCount;
+    public Event(String eventType, Boolean registrationStatus, String eventName, Location location, List<Pilot> pilotList,
+                 List<Round> roundList, Pilot pilotDirector, LocalDate startDate, LocalDate endDate) {
+        this.eventType = eventType;
+        this.registrationStatus = registrationStatus;
         this.eventName = eventName;
         this.location = location;
         this.pilotList = pilotList;
         this.roundList = roundList;
+        this.pilotDirector = pilotDirector;
         this.startDate = startDate;
         this.endDate = endDate;
-        this.registrationOpen = registrationOpen;
-        this.pilotDirector = pilotDirector;
     }
+
 
     public List<Round> getRoundList() {
         return roundList;
@@ -124,12 +118,20 @@ public class Event {
         this.eventId = eventId;
     }
 
-    public byte getEventRoundCount() {
-        return eventRoundCount;
+    public String getEventType() {
+        return eventType;
     }
 
-    public void setEventRoundCount(byte eventRoundCount) {
-        this.eventRoundCount = eventRoundCount;
+    public void setEventType(String eventType) {
+        this.eventType = eventType;
+    }
+
+    public Boolean isRegistrationStatus() {
+        return registrationStatus;
+    }
+
+    public void setRegistrationStatus(Boolean registrationStatus) {
+        this.registrationStatus = registrationStatus;
     }
 
     public String getEventName() {
@@ -164,9 +166,6 @@ public class Event {
         this.endDate = endDate;
     }
 
-    public boolean isRegistrationOpen() {
-        return registrationOpen;
-    }
 
     public Pilot getPilotDirector() {
         return pilotDirector;
@@ -176,8 +175,5 @@ public class Event {
         this.pilotDirector = pilotDirector;
     }
 
-    public void setRegistrationOpen(boolean registrationOpen) {
-        this.registrationOpen = registrationOpen;
-    }
 
 }

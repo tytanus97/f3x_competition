@@ -43,7 +43,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public Optional<Event> getById(Long eventId) {
+    public Optional<Event> findById(Long eventId) {
         return this.eventRepository.findById(eventId);
     }
 
@@ -102,26 +102,11 @@ public class EventServiceImpl implements EventService {
 
     @PostConstruct
     private void config() {
-
         this.modelMapper.typeMap(EventDTO.class,Event.class)
                 .addMapping(EventDTO::getPilotDirector,Event::setPilotDirector);
 
         this.modelMapper.typeMap(Event.class,EventDTO.class)
                 .addMapping(Event::getPilotDirector,EventDTO::setPilotDirector);
-
-       /* PropertyMap<EventDTO, Event> pilotMap = new PropertyMap<EventDTO,Event>() {
-            @Override
-            protected void configure() {
-                map().setPilotDirector((((PilotServiceImpl)pilotService).pilotDTOtoPilot(source.getPilotDirector())));
-            }
-        };
-        PropertyMap<Event, EventDTO> pilotMapReverse = new PropertyMap<Event, EventDTO>() {
-            @Override
-            protected void configure() {
-                map().setPilotDirector((((PilotServiceImpl)pilotService).pilotToPilotDTO(source.getPilotDirector())));
-            }
-        };
-        this.modelMapper.addMappings(pilotMap);*/
     }
 
     public Event eventDTOtoEvent(EventDTO eventDTO) {

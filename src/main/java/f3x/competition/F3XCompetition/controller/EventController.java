@@ -39,19 +39,23 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}")
-    public Optional<Event> getById(@PathVariable Long eventId) {
-        return this.eventService.getById(eventId);
+    public ResponseEntity<EventDTO> findById(@PathVariable Long eventId)
+    {
+        Optional<Event> tmpEvent = this.eventService.findById(eventId);
+        return tmpEvent.map(event -> new ResponseEntity<>(((EventServiceImpl)this.eventService).eventToEventDTO(event),HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+
     }
 
     @GetMapping("/{eventId}/rounds")
     public List<Round> getAllRounds(@PathVariable Long eventId) {
-        Optional<Event> tmpEvent = this.eventService.getById(eventId);
+        Optional<Event> tmpEvent = this.eventService.findById(eventId);
         return tmpEvent.map(Event::getRoundList).orElse(null);
     }
 
     @GetMapping("/{eventId}/pilots")
     public List<Pilot> getEventPilots(@PathVariable Long eventId) {
-        Optional<Event> tmpEvent = this.eventService.getById(eventId);
+        Optional<Event> tmpEvent = this.eventService.findById(eventId);
         return tmpEvent.map(Event::getPilotList).orElse(null);
     }
 
@@ -72,7 +76,7 @@ public class EventController {
     }
     @PutMapping("/{eventId}")
     public ResponseEntity updateEvent(@RequestBody Event event, @PathVariable Long eventId) {
-        Optional<Event> tmpEvent = this.eventService.getById(eventId);
+        Optional<Event> tmpEvent = this.eventService.findById(eventId);
 
         if(tmpEvent.isPresent()) {
             this.eventService.saveEvent(event);
@@ -91,7 +95,7 @@ public class EventController {
 
     @PostMapping("/{eventId}/pilots")
     public void addPilotToEvent(@PathVariable Long eventId,@RequestParam("pilotId") Long pilotId) {
-        Optional<Event> tmpEvent = this.eventService.getById(eventId);
+        Optional<Event> tmpEvent = this.eventService.findById(eventId);
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
 
         tmpEvent.ifPresent(event-> {
@@ -106,7 +110,7 @@ public class EventController {
 
     @PostMapping("/{eventId}/rounds")
     public void addRoundToEvent(@RequestBody Round round,@PathVariable Long eventId) {
-        Optional<Event> tmpEvent = this.eventService.getById(eventId);
+        /*Optional<Event> tmpEvent = this.eventService.getById(eventId);
         tmpEvent.ifPresent(event-> {
             int eventRoundCount = event.getRoundList().size();
             if(eventRoundCount < event.getEventRoundCount()) {
@@ -117,14 +121,14 @@ public class EventController {
             else {
                 //send error response.. for now it's empty
             }
-        });
+        });*/
     }
 
     @PostMapping("/{eventId}/rounds/{roundId}/pilots/{pilotId}/flights")
     public void addFlightsToRound(@RequestBody Stats stats, @PathVariable Long pilotId,
                                   @PathVariable Long eventId,@PathVariable Long roundId) {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
-        Optional<Event> tmpEvent = this.eventService.getById(eventId);
+        Optional<Event> tmpEvent = this.eventService.findById(eventId);
         Optional<Round> tmpRound = this.roundService.getById(roundId);
 
         tmpEvent.ifPresent( event -> {
@@ -144,7 +148,7 @@ public class EventController {
     @DeleteMapping("/{eventId}/rounds/{roundId}")
     public void deleteRoundFromEvent(@PathVariable Long eventId,@PathVariable Long roundId) {
 
-        Optional<Event> tmpEvent = this.eventService.getById(eventId);
+        Optional<Event> tmpEvent = this.eventService.findById(eventId);
         Optional<Round> tmpRound = this.roundService.getById(roundId);
 
         tmpEvent.ifPresent(event->{
@@ -157,7 +161,7 @@ public class EventController {
 
     @DeleteMapping("/{eventId}/pilots/{pilotId}")
     public void removePilotFromEvent(@PathVariable Long eventId,@PathVariable Long pilotId) {
-        Optional<Event> tmpEvent = this.eventService.getById(eventId);
+        Optional<Event> tmpEvent = this.eventService.findById(eventId);
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
 
         tmpEvent.ifPresent(event-> {
