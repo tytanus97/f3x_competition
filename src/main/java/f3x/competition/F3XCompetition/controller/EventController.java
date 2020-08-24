@@ -108,25 +108,15 @@ public class EventController {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         if(!tmpEvent.get().getPilotList().contains(tmpPilot.get())) {
-            return new ResponseEntity<>(this.eventService.addPilotToEvent(tmpEvent.get(),tmpPilot.get()),HttpStatus.OK);
+            Event resultEvent = this.eventService.addPilotToEvent(tmpEvent.get(),tmpPilot.get());
+            return new ResponseEntity<>(((EventServiceImpl)this.eventService).eventToEventDTO(resultEvent),HttpStatus.OK);
         }
         return new ResponseEntity(HttpStatus.ALREADY_REPORTED);
     }
 
     @PostMapping("/{eventId}/rounds")
     public void addRoundToEvent(@RequestBody Round round,@PathVariable Long eventId) {
-        /*Optional<Event> tmpEvent = this.eventService.getById(eventId);
-        tmpEvent.ifPresent(event-> {
-            int eventRoundCount = event.getRoundList().size();
-            if(eventRoundCount < event.getEventRoundCount()) {
-                round.setRoundNumber((short)(eventRoundCount+1));
-                round.setEvent(event);
-                this.roundService.saveRound(round);
-            }
-            else {
-                //send error response.. for now it's empty
-            }
-        });*/
+
     }
 
     @PostMapping("/{eventId}/rounds/{roundId}/pilots/{pilotId}/flights")
