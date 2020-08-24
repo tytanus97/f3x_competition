@@ -55,9 +55,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public void addPilotToEvent(Event event, Pilot pilot) {
+    public Event addPilotToEvent(Event event, Pilot pilot) {
         event.addPilot(pilot);
-        this.eventRepository.save(event);
+        return this.eventRepository.save(event);
     }
 
     @Override

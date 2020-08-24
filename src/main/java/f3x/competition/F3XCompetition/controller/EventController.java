@@ -7,6 +7,7 @@ import f3x.competition.F3XCompetition.service.FlightService;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.RoundService;
 import f3x.competition.F3XCompetition.serviceImpl.EventServiceImpl;
+import f3x.competition.F3XCompetition.serviceImpl.PilotServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/events")
@@ -34,8 +36,9 @@ public class EventController {
     }
 
     @GetMapping("/")
-    public List<Event> getAll() {
-        return this.eventService.getAll();
+    public ResponseEntity<List<EventDTO>> getAll() {
+        return new ResponseEntity<>(this.eventService.getAll().stream().map(((EventServiceImpl)this.eventService)::eventToEventDTO)
+                .collect(Collectors.toList()),HttpStatus.OK);
     }
 
     @GetMapping("/{eventId}")
@@ -54,9 +57,12 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}/pilots")
-    public List<Pilot> getEventPilots(@PathVariable Long eventId) {
+    public ResponseEntity findEventPilots(@PathVariable Long eventId) {
         Optional<Event> tmpEvent = this.eventService.findById(eventId);
-        return tmpEvent.map(Event::getPilotList).orElse(null);
+        return tmpEvent.map(event -> new ResponseEntity<>(event.getPilotList()
+                .stream().map(((PilotServiceImpl) this.pilotService)::pilotToPilotDTO)
+                .collect(Collectors.toList()),HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
     @GetMapping("/{eventId}/pilots/{pilotId}/rounds")
@@ -93,19 +99,18 @@ public class EventController {
         return new ResponseEntity<>(resultEventDTO,HttpStatus.OK);
     }
 
-    @PostMapping("/{eventId}/pilots")
-    public void addPilotToEvent(@PathVariable Long eventId,@RequestParam("pilotId") Long pilotId) {
+    @PostMapping("/{eventId}/pilots/{pilotId}")
+    public ResponseEntity addPilotToEvent(@PathVariable Long eventId,@PathVariable Long pilotId) {
         Optional<Event> tmpEvent = this.eventService.findById(eventId);
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
 
-        tmpEvent.ifPresent(event-> {
-                tmpPilot.ifPresent(pilot -> {
-                    if(!event.getPilotList().contains(pilot)) {
-                        this.eventService.addPilotToEvent(event, pilot);
-                    }
-                });
-        });
-
+        if(tmpEvent.isEmpty() || tmpPilot.isEmpty()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        if(!tmpEvent.get().getPilotList().contains(tmpPilot.get())) {
+            return new ResponseEntity<>(this.eventService.addPilotToEvent(tmpEvent.get(),tmpPilot.get()),HttpStatus.OK);
+        }
+        return new ResponseEntity(HttpStatus.ALREADY_REPORTED);
     }
 
     @PostMapping("/{eventId}/rounds")

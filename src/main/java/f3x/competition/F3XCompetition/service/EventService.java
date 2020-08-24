@@ -12,7 +12,7 @@ public interface EventService {
     Optional<Event> findById(Long eventId);
     Event saveEvent(Event event);
     void removeEvent(Event event);
-    void addPilotToEvent(Event event, Pilot pilot);
+    Event addPilotToEvent(Event event, Pilot pilot);
     void removePilotFromEvent(Event event,Pilot pilot);
     void addRoundToEvent(Event event, Round round);
     void removeRoundFromEvent(Event event,Round round);

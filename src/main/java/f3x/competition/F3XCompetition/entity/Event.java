@@ -90,7 +90,7 @@ public class Event {
     }
 
     public List<Pilot> getPilotList() {
-        return pilotList;
+        return this.pilotList;
     }
 
     public void setPilotList(List<Pilot> pilotList) {
