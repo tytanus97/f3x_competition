@@ -18,32 +18,20 @@ public class Round {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "round_id_generator")
     @SequenceGenerator(name="round_id_generator",initialValue = 1,sequenceName = "round_id_seq",allocationSize = 1)
     @Column(name="round_id")
-    @JsonProperty
     private Long roundId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="event_id")
-    @JsonIgnore
     private Event event;
 
     @Column(name="round_number")
-    @JsonProperty
     private short roundNumber;
 
     @Column(name="round_status")
-    @JsonProperty
     private RoundStatus roundStatus;
 
-   /* @Column(name="round_begin_date")
-    @JsonProperty
-    private Timestamp roundBeginDate =  new Timestamp(System.currentTimeMillis());
-
-    @Column(name="round_finish_date")
-    @JsonProperty
-    private Timestamp roundFinishDate  = new Timestamp(System.currentTimeMillis()+3600000);*/
 
     @OneToMany(mappedBy = "round",fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REMOVE})
-    @JsonIgnore
     private List<Flight> roundFlights;
 
     public Round() {
