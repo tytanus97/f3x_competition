@@ -2,26 +2,32 @@ package f3x.competition.F3XCompetition.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import f3x.competition.F3XCompetition.entity.Event;
-import f3x.competition.F3XCompetition.enumerate.RoundStatus;
+import f3x.competition.F3XCompetition.entity.Flight;
+
+import java.util.List;
 
 public class RoundDTO {
     @JsonProperty
     private Long roundId;
     @JsonProperty
-    private Event event;
+    private EventDTO eventDTO;
     @JsonProperty
     private short roundNumber;
     @JsonProperty
-    private RoundStatus roundStatus;
+    private Boolean roundOpened;
+    @JsonProperty
+    private List<Flight> flightList;
+
 
     public RoundDTO() {
     }
 
-    public RoundDTO(Long roundId, Event event, short roundNumber, RoundStatus roundStatus) {
+    public RoundDTO(Long roundId, EventDTO eventDTO, short roundNumber, Boolean roundOpened, List<Flight> flightList) {
         this.roundId = roundId;
-        this.event = event;
+        this.eventDTO = eventDTO;
         this.roundNumber = roundNumber;
-        this.roundStatus = roundStatus;
+        this.roundOpened = roundOpened;
+        this.flightList = flightList;
     }
 
     public Long getRoundId() {
@@ -32,12 +38,12 @@ public class RoundDTO {
         this.roundId = roundId;
     }
 
-    public Event getEvent() {
-        return event;
+    public EventDTO getEventDTO() {
+        return eventDTO;
     }
 
-    public void setEvent(Event event) {
-        this.event = event;
+    public void setEventDTO(EventDTO eventDTO) {
+        this.eventDTO = eventDTO;
     }
 
     public short getRoundNumber() {
@@ -48,21 +54,29 @@ public class RoundDTO {
         this.roundNumber = roundNumber;
     }
 
-    public RoundStatus getRoundStatus() {
-        return roundStatus;
+    public Boolean getRoundOpened() {
+        return roundOpened;
     }
 
-    public void setRoundStatus(RoundStatus roundStatus) {
-        this.roundStatus = roundStatus;
+    public void setRoundOpened(Boolean roundOpened) {
+        this.roundOpened = roundOpened;
+    }
+
+    public List<Flight> getFlightList() {
+        return flightList;
+    }
+
+    public void setFlightList(List<Flight> flightList) {
+        this.flightList = flightList;
     }
 
     @Override
     public String toString() {
         return "RoundDTO{" +
                 "roundId=" + roundId +
-                ", event=" + event +
+                ", event=" + eventDTO +
                 ", roundNumber=" + roundNumber +
-                ", roundStatus=" + roundStatus +
+                ", roundStatus=" + roundOpened +
                 '}';
     }
 }

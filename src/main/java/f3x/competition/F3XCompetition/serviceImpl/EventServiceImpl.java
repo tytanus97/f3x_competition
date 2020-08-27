@@ -37,7 +37,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public List<Event> getAll() {
+    public List<Event> findAll() {
         return this.eventRepository.findAll();
     }
 
@@ -70,10 +70,9 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public void addRoundToEvent(Event event, Round round) {
-        event.addRound(round);
-        this.eventRepository.save(event);
-        this.roundService.saveRound(round);
+    public Round addRoundToEvent(Event event, Round round) {
+        round.setEvent(event);
+        return this.roundService.saveRound(round);
     }
 
     @Override
@@ -86,7 +85,7 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public List<Round> getEventRounds(Event event) {
+    public List<Round> findEventRounds(Event event) {
         return event.getRoundList();
     }
 

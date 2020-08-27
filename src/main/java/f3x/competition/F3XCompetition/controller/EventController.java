@@ -1,13 +1,18 @@
 package f3x.competition.F3XCompetition.controller;
 
 import f3x.competition.F3XCompetition.dto.EventDTO;
+import f3x.competition.F3XCompetition.dto.FlightDTO;
+import f3x.competition.F3XCompetition.dto.RoundDTO;
 import f3x.competition.F3XCompetition.entity.*;
 import f3x.competition.F3XCompetition.service.EventService;
 import f3x.competition.F3XCompetition.service.FlightService;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.RoundService;
 import f3x.competition.F3XCompetition.serviceImpl.EventServiceImpl;
+import f3x.competition.F3XCompetition.serviceImpl.FlightServiceImpl;
 import f3x.competition.F3XCompetition.serviceImpl.PilotServiceImpl;
+import f3x.competition.F3XCompetition.serviceImpl.RoundServiceImpl;
+import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -37,7 +42,7 @@ public class EventController {
 
     @GetMapping("/")
     public ResponseEntity<List<EventDTO>> getAll() {
-        return new ResponseEntity<>(this.eventService.getAll().stream().map(((EventServiceImpl)this.eventService)::eventToEventDTO)
+        return new ResponseEntity<>(this.eventService.findAll().stream().map(((EventServiceImpl)this.eventService)::eventToEventDTO)
                 .collect(Collectors.toList()),HttpStatus.OK);
     }
 
@@ -51,9 +56,13 @@ public class EventController {
     }
 
     @GetMapping("/{eventId}/rounds")
-    public List<Round> getAllRounds(@PathVariable Long eventId) {
+    public ResponseEntity<List<RoundDTO>> getAllRounds(@PathVariable Long eventId) {
+
         Optional<Event> tmpEvent = this.eventService.findById(eventId);
-        return tmpEvent.map(Event::getRoundList).orElse(null);
+        List<RoundDTO> roundList = tmpEvent.map(event -> event.getRoundList().stream()
+                .map(((RoundServiceImpl)this.roundService)::roundToRoundDTO)
+                .collect(Collectors.toList())).orElse(null);
+        return new ResponseEntity<>(roundList,HttpStatus.OK);
     }
 
     @GetMapping("/{eventId}/pilots")
@@ -67,17 +76,17 @@ public class EventController {
 
     @GetMapping("/{eventId}/pilots/{pilotId}/rounds")
     public List<Flight> getPilotRoundFlights(@PathVariable Long eventId,@PathVariable Long pilotId) {
-        return this.flightService.getByEventAndPilot(eventId,pilotId);
+        return this.flightService.findByEventAndPilot(eventId,pilotId);
     }
 
     @GetMapping("/{eventId}/pilots/{pilotId}/rounds/{roundId}")
     public List<Flight> getPilotRoundFlights(@PathVariable Long eventId,@PathVariable Long pilotId,@PathVariable Long roundId) {
-        return this.flightService.getByEventAndPilotAndRound(eventId,pilotId,roundId);
+        return this.flightService.findByEventAndPilotAndRound(eventId,pilotId,roundId);
     }
 
     @GetMapping("/{eventId}/rounds/{roundId}/flights")
     public List<Flight> getEventRoundFlights(@PathVariable Long eventId,@PathVariable Long roundId) {
-        Optional<Round> tmpRound = this.roundService.getById(roundId);
+        Optional<Round> tmpRound = this.roundService.findById(roundId);
         return tmpRound.map(Round::getRoundFlights).orElse(null);
     }
     @PutMapping("/{eventId}")
@@ -116,36 +125,40 @@ public class EventController {
     }
 
     @PostMapping("/{eventId}/rounds")
-    public void addRoundToEvent(@RequestBody Round round,@PathVariable Long eventId) {
+    public ResponseEntity<RoundDTO> addRoundToEvent(@RequestBody RoundDTO roundDTO, @PathVariable Long eventId) {
+            Optional<Event> tmpEvent = this.eventService.findById(eventId);
+            Round round = tmpEvent.map(event -> this.eventService.addRoundToEvent(event,((RoundServiceImpl)this.roundService).roundDTOtoRound(roundDTO)))
+                    .orElse(null);
 
+            return round != null ? new ResponseEntity<>(((RoundServiceImpl)this.roundService)
+                    .roundToRoundDTO(round),HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/{eventId}/rounds/{roundId}/pilots/{pilotId}/flights")
-    public void addFlightsToRound(@RequestBody Stats stats, @PathVariable Long pilotId,
-                                  @PathVariable Long eventId,@PathVariable Long roundId) {
-        Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
-        Optional<Event> tmpEvent = this.eventService.findById(eventId);
-        Optional<Round> tmpRound = this.roundService.getById(roundId);
+    @PostMapping("/rounds/{roundId}/pilots/{pilotId}/flights")
+    public ResponseEntity<FlightDTO> addFlightsToRound(@RequestBody FlightDTO flightDTO, @PathVariable Long pilotId,
+                                   @PathVariable Long roundId) {
 
-        tmpEvent.ifPresent( event -> {
-            tmpRound.ifPresent(round-> {
-            tmpPilot.ifPresent(pilot -> {
-                Flight flight = new Flight();
-                flight.setPilot(pilot);
-                flight.setStats(stats);
-                flight.setEvent(event);
-                flight.setRound(round);
-                this.flightService.saveFlight(flight);
-            });
-        });
-        });
+        Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
+        Optional<Round> tmpRound = this.roundService.findById(roundId);
+
+        Flight flight = ((FlightServiceImpl)this.flightService).flightDTOtoFlight(flightDTO);
+
+        if(tmpPilot.isPresent() && tmpRound.isPresent()) {
+            flight.setRound(tmpRound.get());
+            flight.setPilot(tmpPilot.get());
+            flight = this.flightService.saveFlight(flight);
+
+            return new ResponseEntity<>(((FlightServiceImpl)this.flightService).flightToFlightDTO(flight),HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{eventId}/rounds/{roundId}")
     public void deleteRoundFromEvent(@PathVariable Long eventId,@PathVariable Long roundId) {
 
         Optional<Event> tmpEvent = this.eventService.findById(eventId);
-        Optional<Round> tmpRound = this.roundService.getById(roundId);
+        Optional<Round> tmpRound = this.roundService.findById(roundId);
 
         tmpEvent.ifPresent(event->{
             tmpRound.ifPresent(round->{

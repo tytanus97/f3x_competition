@@ -8,15 +8,15 @@ import java.util.List;
 import java.util.Optional;
 
 public interface EventService {
-    List<Event> getAll();
+    List<Event> findAll();
     Optional<Event> findById(Long eventId);
     Event saveEvent(Event event);
     void removeEvent(Event event);
     Event addPilotToEvent(Event event, Pilot pilot);
     void removePilotFromEvent(Event event,Pilot pilot);
-    void addRoundToEvent(Event event, Round round);
+    Round addRoundToEvent(Event event, Round round);
     void removeRoundFromEvent(Event event,Round round);
-    List<Round> getEventRounds(Event event);
+    List<Round> findEventRounds(Event event);
 
 
 
