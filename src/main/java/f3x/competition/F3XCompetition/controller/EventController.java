@@ -105,6 +105,7 @@ public class EventController {
         Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
 
         if(tmpEvent.isEmpty() || tmpPilot.isEmpty()) {
+
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
         if(!tmpEvent.get().getPilotList().contains(tmpPilot.get())) {

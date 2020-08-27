@@ -15,7 +15,6 @@ public class Flight {
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "flight_id_generator")
     @SequenceGenerator(name="flight_id_generator",initialValue = 1,sequenceName = "flight_id_seq",allocationSize = 1)
     @Column(name="flight_id")
-    @JsonProperty
     private Long flightId;
 
     @ManyToOne
@@ -23,30 +22,30 @@ public class Flight {
     @JsonIgnore
     private Pilot pilot;
 
-    @ManyToOne
-    @JoinColumn(name="event_id")
-    @JsonIgnore
-    private Event event;
 
     @ManyToOne
     @JoinColumn(name="round_id")
-    @JsonIgnore
     private Round round;
 
+    @Column(name="flight_duration")
+    private int flightDuration;
 
-    @OneToOne(cascade = {CascadeType.PERSIST,CascadeType.REMOVE})
-    @JoinColumn(name="stats_id")
-    @JsonProperty
-    private Stats stats;
+    @Column(name="flight_landing")
+    private int flightLanding;
+
+    @Column(name="flight_penalty")
+    private int flightPenalty;
+
 
     public Flight() {
     }
 
-    public Flight(Pilot pilot, Event event, Round round, Stats stats) {
+    public Flight(Pilot pilot, Round round, int flightDuration, int flightLanding, int flightPenalty) {
         this.pilot = pilot;
-        this.event = event;
         this.round = round;
-        this.stats = stats;
+        this.flightDuration = flightDuration;
+        this.flightLanding = flightLanding;
+        this.flightPenalty = flightPenalty;
     }
 
     public Long getFlightId() {
@@ -65,14 +64,6 @@ public class Flight {
         this.pilot = pilot;
     }
 
-    public Event getEvent() {
-        return event;
-    }
-
-    public void setEvent(Event event) {
-        this.event = event;
-    }
-
     public Round getRound() {
         return round;
     }
@@ -81,13 +72,27 @@ public class Flight {
         this.round = round;
     }
 
-
-    public Stats getStats() {
-        return stats;
+    public int getFlightDuration() {
+        return flightDuration;
     }
 
-    public void setStats(Stats stats) {
-        this.stats = stats;
+    public void setFlightDuration(int flightDuration) {
+        this.flightDuration = flightDuration;
     }
 
+    public int getFlightLanding() {
+        return flightLanding;
+    }
+
+    public void setFlightLanding(int flightLanding) {
+        this.flightLanding = flightLanding;
+    }
+
+    public int getFlightPenalty() {
+        return flightPenalty;
+    }
+
+    public void setFlightPenalty(int flightPenalty) {
+        this.flightPenalty = flightPenalty;
+    }
 }
