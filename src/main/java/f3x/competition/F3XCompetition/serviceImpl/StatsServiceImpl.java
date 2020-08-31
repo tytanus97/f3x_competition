@@ -1,6 +1,5 @@
 package f3x.competition.F3XCompetition.serviceImpl;
 
-import f3x.competition.F3XCompetition.entity.Stats;
 import f3x.competition.F3XCompetition.repository.StatsRepository;
 import f3x.competition.F3XCompetition.service.StatsService;
 import org.springframework.beans.factory.annotation.Autowired;

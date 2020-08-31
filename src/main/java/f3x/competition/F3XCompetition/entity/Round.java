@@ -37,14 +37,6 @@ public class Round {
     public Round() {
     }
 
-    /*public Round(Event event, short roundNumber, RoundStatus roundStatus, Timestamp roundBeginDate, Timestamp roundFinishDate, List<Flight> roundFlights) {
-        this.event = event;
-        this.roundNumber = roundNumber;
-        this.roundStatus = roundStatus;
-        this.roundBeginDate = roundBeginDate;
-        this.roundFinishDate = roundFinishDate;
-        this.roundFlights = roundFlights;
-    }*/
 
     public Round(Event event, short roundNumber, RoundStatus roundStatus, List<Flight> roundFlights) {
         this.event = event;

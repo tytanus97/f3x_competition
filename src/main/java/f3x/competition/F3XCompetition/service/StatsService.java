@@ -1,7 +1,5 @@
 package f3x.competition.F3XCompetition.service;
 
-import f3x.competition.F3XCompetition.entity.Stats;
-
 import java.util.List;
 import java.util.Optional;
 

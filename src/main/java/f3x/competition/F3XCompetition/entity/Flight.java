@@ -22,7 +22,6 @@ public class Flight {
     @JsonIgnore
     private Pilot pilot;
 
-
     @ManyToOne
     @JoinColumn(name="round_id")
     private Round round;
