@@ -146,6 +146,16 @@ public class EventController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
+    @PatchMapping("/")
+    public ResponseEntity changeEventRegisterStatus(@PathVariable Long eventId,@RequestBody Boolean registerStatus) {
+        Optional<Event> tmpEvent = this.eventService.findById(eventId);
+        return tmpEvent.map(event -> {
+        event.setRegistrationStatus(registerStatus);
+        return new ResponseEntity<>(((EventServiceImpl)this.eventService)
+                .eventToEventDTO(this.eventService.saveEvent(event)),HttpStatus.OK);
+        }).orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
+
     @DeleteMapping("/{eventId}/rounds/{roundId}")
     public void deleteRoundFromEvent(@PathVariable Long eventId,@PathVariable Long roundId) {
 

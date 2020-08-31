@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -49,7 +51,8 @@ public class EventServiceImpl implements EventService {
 
     @Override
     @Transactional
-    public Event saveEvent(Event event) {
+    public Event saveEvent(Event event)
+    {
         return this.eventRepository.save(event);
     }
 
@@ -114,5 +117,16 @@ public class EventServiceImpl implements EventService {
 
     public EventDTO eventToEventDTO(Event event) {
         return this.modelMapper.map(event,EventDTO.class);
+    }
+
+    public void checkEventStatusTrue() {
+        List<Event> eventList = this.eventRepository.findAllByStatusTrue();
+        LocalDate currentDate = LocalDate.now();
+        eventList.forEach(event -> {
+            if(event.getEndDate().compareTo(currentDate) < 0) {
+                event.setEventStatus(false);
+                this.eventRepository.save(event);
+            }
+        });
     }
 }

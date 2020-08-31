@@ -11,6 +11,8 @@ public class EventDTO {
     @JsonProperty
     private Boolean registrationStatus;
     @JsonProperty
+    private Boolean eventStatus;
+    @JsonProperty
     private String eventType;
     @JsonProperty
     private String eventName;
@@ -27,9 +29,10 @@ public class EventDTO {
 
     }
 
-    public EventDTO(Long eventId, Boolean registrationStatus, String eventType, String eventName, LocalDate startDate, LocalDate endDate, Location location, PilotDTO pilotDirector) {
+    public EventDTO(Long eventId, Boolean registrationStatus, Boolean eventStatus, String eventType, String eventName, LocalDate startDate, LocalDate endDate, Location location, PilotDTO pilotDirector) {
         this.eventId = eventId;
         this.registrationStatus = registrationStatus;
+        this.eventStatus = eventStatus;
         this.eventType = eventType;
         this.eventName = eventName;
         this.startDate = startDate;
@@ -102,11 +105,24 @@ public class EventDTO {
         this.location = location;
     }
 
+    public Boolean getRegistrationStatus() {
+        return registrationStatus;
+    }
+
+    public Boolean getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(Boolean eventStatus) {
+        this.eventStatus = eventStatus;
+    }
+
     @Override
     public String toString() {
         return "EventDTO{" +
                 "eventId=" + eventId +
                 ", registrationStatus=" + registrationStatus +
+                ", eventStatus=" + eventStatus +
                 ", eventType='" + eventType + '\'' +
                 ", eventName='" + eventName + '\'' +
                 ", startDate=" + startDate +

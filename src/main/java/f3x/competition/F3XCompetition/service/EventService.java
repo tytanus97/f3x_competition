@@ -19,5 +19,5 @@ public interface EventService {
     List<Round> findEventRounds(Event event);
 
 
-
+    void checkEventStatusTrue();
 }

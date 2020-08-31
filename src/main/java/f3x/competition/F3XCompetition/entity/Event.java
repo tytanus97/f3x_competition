@@ -22,6 +22,9 @@ public class Event {
     @Column(name="registration_status")
     private Boolean registrationStatus;
 
+    @Column(name="event_status")
+    private Boolean eventStatus;
+
     @Column(name="event_name")
     private String eventName;
 
@@ -51,10 +54,11 @@ public class Event {
     public Event() {
     }
 
-    public Event(String eventType, Boolean registrationStatus, String eventName, Location location, List<Pilot> pilotList,
-                 List<Round> roundList, Pilot pilotDirector, LocalDate startDate, LocalDate endDate) {
+    public Event(String eventType, Boolean registrationStatus, Boolean eventStatus, String eventName, Location location,
+                 List<Pilot> pilotList, List<Round> roundList, Pilot pilotDirector, LocalDate startDate, LocalDate endDate) {
         this.eventType = eventType;
         this.registrationStatus = registrationStatus;
+        this.eventStatus = eventStatus;
         this.eventName = eventName;
         this.location = location;
         this.pilotList = pilotList;
@@ -63,7 +67,6 @@ public class Event {
         this.startDate = startDate;
         this.endDate = endDate;
     }
-
 
     public List<Round> getRoundList() {
         return roundList;
@@ -175,5 +178,15 @@ public class Event {
         this.pilotDirector = pilotDirector;
     }
 
+    public Boolean getRegistrationStatus() {
+        return registrationStatus;
+    }
 
+    public Boolean getEventStatus() {
+        return eventStatus;
+    }
+
+    public void setEventStatus(Boolean eventStatus) {
+        this.eventStatus = eventStatus;
+    }
 }
