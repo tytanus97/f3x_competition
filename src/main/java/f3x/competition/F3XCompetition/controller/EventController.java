@@ -146,11 +146,12 @@ public class EventController {
         return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
     }
 
-    @PatchMapping("/")
-    public ResponseEntity changeEventRegisterStatus(@PathVariable Long eventId,@RequestBody Boolean registerStatus) {
+    @PatchMapping("/{eventId}/registrationStatus")
+    public ResponseEntity changeEventRegisterStatus(@PathVariable Long eventId,@RequestBody String registrationStatusStr) {
+        Boolean registrationStatus = Boolean.valueOf(registrationStatusStr);
         Optional<Event> tmpEvent = this.eventService.findById(eventId);
         return tmpEvent.map(event -> {
-        event.setRegistrationStatus(registerStatus);
+        event.setRegistrationStatus(registrationStatus);
         return new ResponseEntity<>(((EventServiceImpl)this.eventService)
                 .eventToEventDTO(this.eventService.saveEvent(event)),HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
