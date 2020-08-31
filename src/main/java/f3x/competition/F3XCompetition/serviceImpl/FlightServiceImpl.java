@@ -38,17 +38,6 @@ public class FlightServiceImpl implements FlightService {
         return this.flightRepository.findById(flightId);
     }
 
-    @Override
-    @Transactional
-    public List<Flight> findByEventAndPilot(Event event, Pilot pilot) {
-        return this.flightRepository.findAllByEventAndPilot(event,pilot);
-    }
-
-    @Override
-    @Transactional
-    public List<Flight> findByEventAndPilot(Long eventId, Long pilotId) {
-        return this.flightRepository.findAllByEvent_EventIdAndPilot_PilotId(eventId,pilotId);
-    }
 
     @Override
     @Transactional
@@ -66,12 +55,6 @@ public class FlightServiceImpl implements FlightService {
     @Transactional
     public void deleteFlightByFlightId(Long flightId) {
         this.flightRepository.deleteFlightByFlightId(flightId);
-    }
-
-    @Override
-    @Transactional
-    public List<Flight> findByEventAndPilotAndRound(Long eventId, Long pilotId, Long roundId) {
-        return this.flightRepository.findAllByEvent_EventIdAndPilot_PilotIdAndRound_RoundId(eventId,pilotId,roundId);
     }
 
 

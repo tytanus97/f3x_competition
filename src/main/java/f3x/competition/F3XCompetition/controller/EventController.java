@@ -3,7 +3,10 @@ package f3x.competition.F3XCompetition.controller;
 import f3x.competition.F3XCompetition.dto.EventDTO;
 import f3x.competition.F3XCompetition.dto.FlightDTO;
 import f3x.competition.F3XCompetition.dto.RoundDTO;
-import f3x.competition.F3XCompetition.entity.*;
+import f3x.competition.F3XCompetition.entity.Event;
+import f3x.competition.F3XCompetition.entity.Flight;
+import f3x.competition.F3XCompetition.entity.Pilot;
+import f3x.competition.F3XCompetition.entity.Round;
 import f3x.competition.F3XCompetition.service.EventService;
 import f3x.competition.F3XCompetition.service.FlightService;
 import f3x.competition.F3XCompetition.service.PilotService;
@@ -12,7 +15,6 @@ import f3x.competition.F3XCompetition.serviceImpl.EventServiceImpl;
 import f3x.competition.F3XCompetition.serviceImpl.FlightServiceImpl;
 import f3x.competition.F3XCompetition.serviceImpl.PilotServiceImpl;
 import f3x.competition.F3XCompetition.serviceImpl.RoundServiceImpl;
-import io.swagger.models.Response;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,16 +74,6 @@ public class EventController {
                 .stream().map(((PilotServiceImpl) this.pilotService)::pilotToPilotDTO)
                 .collect(Collectors.toList()),HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    @GetMapping("/{eventId}/pilots/{pilotId}/rounds")
-    public List<Flight> getPilotRoundFlights(@PathVariable Long eventId,@PathVariable Long pilotId) {
-        return this.flightService.findByEventAndPilot(eventId,pilotId);
-    }
-
-    @GetMapping("/{eventId}/pilots/{pilotId}/rounds/{roundId}")
-    public List<Flight> getPilotRoundFlights(@PathVariable Long eventId,@PathVariable Long pilotId,@PathVariable Long roundId) {
-        return this.flightService.findByEventAndPilotAndRound(eventId,pilotId,roundId);
     }
 
     @GetMapping("/{eventId}/rounds/{roundId}/flights")
