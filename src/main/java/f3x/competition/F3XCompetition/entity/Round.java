@@ -1,9 +1,6 @@
 package f3x.competition.F3XCompetition.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import f3x.competition.F3XCompetition.enumerate.RoundStatus;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -28,21 +25,21 @@ public class Round {
     private short roundNumber;
 
     @Column(name="round_status")
-    private RoundStatus roundStatus;
+    private Boolean roundStatus;
 
 
     @OneToMany(mappedBy = "round",fetch = FetchType.LAZY,cascade = {CascadeType.PERSIST,CascadeType.DETACH,CascadeType.REMOVE})
-    private List<Flight> roundFlights;
+    private List<Flight> flightList;
 
     public Round() {
     }
 
 
-    public Round(Event event, short roundNumber, RoundStatus roundStatus, List<Flight> roundFlights) {
+    public Round(Event event, short roundNumber, Boolean roundStatus, List<Flight> flightList) {
         this.event = event;
         this.roundNumber = roundNumber;
         this.roundStatus = roundStatus;
-        this.roundFlights = roundFlights;
+        this.flightList = flightList;
     }
 
     public Long getRoundId() {
@@ -69,11 +66,11 @@ public class Round {
         this.roundNumber = roundNumber;
     }
 
-    public RoundStatus getRoundStatus() {
+    public Boolean getRoundStatus() {
         return roundStatus;
     }
 
-    public void setRoundStatus(RoundStatus roundStatus) {
+    public void setRoundStatus(Boolean roundStatus) {
         this.roundStatus = roundStatus;
     }
 /*
@@ -93,25 +90,25 @@ public class Round {
         this.roundFinishDate = roundFinishDate;
     }*/
 
-    public List<Flight> getRoundFlights() {
-        return roundFlights;
+    public List<Flight> getFlightList() {
+        return flightList;
     }
 
-    public void setRoundFlights(List<Flight> roundFlights) {
-        this.roundFlights = roundFlights;
+    public void setFlightList(List<Flight> flightList) {
+        this.flightList = flightList;
     }
 
     public void addFlight(Flight flight) {
-        if(this.roundFlights == null) {
-            this.roundFlights = new ArrayList<>();
+        if(this.flightList == null) {
+            this.flightList = new ArrayList<>();
         }
-        this.roundFlights.add(flight);
+        this.flightList.add(flight);
         flight.setRound(this);
     }
 
     public void removeFlight(Flight flight) {
-        if(this.roundFlights != null && !this.roundFlights.isEmpty()) {
-            this.roundFlights.remove(flight);
+        if(this.flightList != null && !this.flightList.isEmpty()) {
+            this.flightList.remove(flight);
             flight.setRound(null);
         }
     }
@@ -122,8 +119,6 @@ public class Round {
                 "round_id=" + roundId +
                 ", roundNumber=" + roundNumber +
                 ", roundStatus=" + roundStatus +
-              /*  ", roundBeginDate=" + roundBeginDate +
-                ", roundFinishDate=" + roundFinishDate +*/
                 '}';
     }
 }

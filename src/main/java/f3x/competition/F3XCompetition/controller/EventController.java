@@ -62,8 +62,17 @@ public class EventController {
 
         Optional<Event> tmpEvent = this.eventService.findById(eventId);
         List<RoundDTO> roundList = tmpEvent.map(event -> event.getRoundList().stream()
-                .map(((RoundServiceImpl)this.roundService)::roundToRoundDTO)
+                .map(round -> {
+                    System.out.println(round.getFlightList() + "id rundy: " + round.getRoundId());
+
+                   return ((RoundServiceImpl)this.roundService).roundToRoundDTO(round);
+                })
                 .collect(Collectors.toList())).orElse(null);
+        if(roundList != null) {
+            for (RoundDTO round : roundList) {
+                System.out.println(round.getFlightList().toString());
+            }
+        }
         return new ResponseEntity<>(roundList,HttpStatus.OK);
     }
 
@@ -79,8 +88,9 @@ public class EventController {
     @GetMapping("/{eventId}/rounds/{roundId}/flights")
     public List<Flight> getEventRoundFlights(@PathVariable Long eventId,@PathVariable Long roundId) {
         Optional<Round> tmpRound = this.roundService.findById(roundId);
-        return tmpRound.map(Round::getRoundFlights).orElse(null);
+        return tmpRound.map(Round::getFlightList).orElse(null);
     }
+
     @PutMapping("/{eventId}")
     public ResponseEntity updateEvent(@RequestBody Event event, @PathVariable Long eventId) {
         Optional<Event> tmpEvent = this.eventService.findById(eventId);
@@ -119,11 +129,11 @@ public class EventController {
     @PostMapping("/{eventId}/rounds")
     public ResponseEntity<RoundDTO> addRoundToEvent(@RequestBody RoundDTO roundDTO, @PathVariable Long eventId) {
             Optional<Event> tmpEvent = this.eventService.findById(eventId);
-            Round round = tmpEvent.map(event -> this.eventService.addRoundToEvent(event,((RoundServiceImpl)this.roundService).roundDTOtoRound(roundDTO)))
-                    .orElse(null);
-
-            return round != null ? new ResponseEntity<>(((RoundServiceImpl)this.roundService)
-                    .roundToRoundDTO(round),HttpStatus.OK): new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            Round round = ((RoundServiceImpl)this.roundService).roundDTOtoRound(roundDTO);
+            tmpEvent.ifPresent(round::setEvent);
+            round = this.roundService.saveRound(round);
+            return new ResponseEntity<>(((RoundServiceImpl)this.roundService)
+                    .roundToRoundDTO(round),HttpStatus.OK);
     }
 
     @PostMapping("/rounds/{roundId}/pilots/{pilotId}/flights")
@@ -155,6 +165,28 @@ public class EventController {
         return new ResponseEntity<>(((EventServiceImpl)this.eventService)
                 .eventToEventDTO(this.eventService.saveEvent(event)),HttpStatus.OK);
         }).orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+    }
+
+    @PutMapping("/rounds/{roundId}/finalizeRound")
+    public ResponseEntity finalizeRound(@PathVariable Long roundId, @RequestBody RoundDTO roundDTO) {
+        Optional<Round> tmpRound = this.roundService.findById(roundId);
+        Round requestRound = ((RoundServiceImpl)this.roundService).roundDTOtoRound(roundDTO);
+        return tmpRound.map(round -> {
+           round.getEvent().getPilotList().forEach(pilot -> {
+                Optional<Flight> containedFlight = requestRound.getFlightList().stream()
+                        .filter(flight -> flight.getPilot().getPilotId().equals(pilot.getPilotId())).findAny();
+                if(containedFlight.isEmpty()) this.flightService.saveFlight(new Flight(pilot,round,0,0,0,0));
+
+            });
+            round.setRoundStatus(false);
+            Round updatedRound = this.roundService.saveRound(round);
+            System.out.println(updatedRound.getFlightList().toString() + " id rundy: " + updatedRound.getRoundId());
+            if(updatedRound == null) {
+                return new ResponseEntity(HttpStatus.NOT_FOUND);
+            }
+            return new ResponseEntity(HttpStatus.OK);
+        }).orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
+
     }
 
     @DeleteMapping("/{eventId}/rounds/{roundId}")

@@ -43,7 +43,7 @@ public class RoundServiceImpl  implements RoundService {
     @Override
     @Transactional
     public List<Flight> findRoundFlights(Round round) {
-        return round.getRoundFlights();
+        return round.getFlightList();
     }
 
     @Override

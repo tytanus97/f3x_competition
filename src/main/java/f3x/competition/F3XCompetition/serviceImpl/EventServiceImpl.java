@@ -125,6 +125,7 @@ public class EventServiceImpl implements EventService {
         eventList.forEach(event -> {
             if(event.getEndDate().compareTo(currentDate) < 0) {
                 event.setEventStatus(false);
+                event.setRegistrationStatus(false);
                 this.eventRepository.save(event);
             }
         });

@@ -35,16 +35,20 @@ public class Flight {
     @Column(name="flight_penalty")
     private int flightPenalty;
 
+    @Column(name="total")
+    private float total;
+
 
     public Flight() {
     }
 
-    public Flight(Pilot pilot, Round round, int flightDuration, int flightLanding, int flightPenalty) {
+    public Flight(Pilot pilot, Round round, int flightDuration, int flightLanding, int flightPenalty,float total) {
         this.pilot = pilot;
         this.round = round;
         this.flightDuration = flightDuration;
         this.flightLanding = flightLanding;
         this.flightPenalty = flightPenalty;
+        this.total = total;
     }
 
     public Long getFlightId() {
@@ -93,5 +97,24 @@ public class Flight {
 
     public void setFlightPenalty(int flightPenalty) {
         this.flightPenalty = flightPenalty;
+    }
+
+    public float getTotal() {
+        return total;
+    }
+
+    public void setTotal(float total) {
+        this.total = total;
+    }
+
+    @Override
+    public String toString() {
+        return "Flight{" +
+                "flightId=" + flightId +
+                ", flightDuration=" + flightDuration +
+                ", flightLanding=" + flightLanding +
+                ", flightPenalty=" + flightPenalty +
+                ", total=" + total +
+                '}';
     }
 }
