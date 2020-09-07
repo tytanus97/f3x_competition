@@ -136,24 +136,19 @@ public class EventController {
                     .roundToRoundDTO(round),HttpStatus.OK);
     }
 
-    @PostMapping("/rounds/{roundId}/pilots/{pilotId}/flights")
-    public ResponseEntity<FlightDTO> addFlightsToRound(@RequestBody FlightDTO flightDTO, @PathVariable Long pilotId,
-                                   @PathVariable Long roundId) {
+    @PostMapping("/rounds/{roundId}/flights")
+    public ResponseEntity addFlightsToRound(@RequestBody FlightDTO flightDTO, @PathVariable Long roundId) {
 
-        Optional<Pilot> tmpPilot = this.pilotService.getById(pilotId);
         Optional<Round> tmpRound = this.roundService.findById(roundId);
-
         Flight flight = ((FlightServiceImpl)this.flightService).flightDTOtoFlight(flightDTO);
 
-        if(tmpPilot.isPresent() && tmpRound.isPresent()) {
-            flight.setRound(tmpRound.get());
-            flight.setPilot(tmpPilot.get());
-            flight = this.flightService.saveFlight(flight);
-
-            return new ResponseEntity<>(((FlightServiceImpl)this.flightService).flightToFlightDTO(flight),HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        return tmpRound.map(round -> {
+            flight.setRound(round);
+            if(this.flightService.saveFlight(flight) == null) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+            return new ResponseEntity(HttpStatus.CREATED);
+        }).orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
     }
 
     @PatchMapping("/{eventId}/registrationStatus")
