@@ -1,11 +1,10 @@
 package f3x.competition.F3XCompetition.controller;
 
-import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Flight;
-import f3x.competition.F3XCompetition.repository.EventRepository;
-import f3x.competition.F3XCompetition.repository.FlightRepository;
-import f3x.competition.F3XCompetition.repository.RoundRepository;
+import f3x.competition.F3XCompetition.service.FlightService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,22 +15,17 @@ import java.util.Optional;
 @CrossOrigin(allowCredentials = "true",allowedHeaders = "*")
 public class FlightController {
 
-    private final FlightRepository flightRepository;
+    private final FlightService flightService;
 
     @Autowired
-    public FlightController(FlightRepository flightRepository, EventRepository eventRepository, RoundRepository roundRepository) {
-        this.flightRepository = flightRepository;
-
+    public FlightController(FlightService flightService) {
+        this.flightService = flightService;
     }
 
-    @GetMapping("/")
-    public List<Flight> getAll() {
-       return this.flightRepository.findAll();
-    }
-
-    @GetMapping("/{flightId}")
-    public Optional<Flight> getById(@PathVariable Long flightId) {
-        return this.flightRepository.findById(flightId);
+    @DeleteMapping("/deleteFlight/{flightId}")
+    public ResponseEntity deleteFlightById(@PathVariable Long flightId) {
+        this.flightService.deleteFlightByFlightId(flightId);
+        return new ResponseEntity(HttpStatus.OK);
     }
 
 }
