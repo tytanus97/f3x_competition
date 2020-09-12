@@ -56,12 +56,13 @@ public class F3XCompetitionApplication {
 	}
 
 	@PostConstruct
-	public void addDefaultUserCredits() {
-		List<PilotCredential> pilotCredentialsList = Stream.of(
-				new PilotCredential(this.passwordEncoder.encode("abc"),"abc"),
-				new PilotCredential(this.passwordEncoder.encode("test"),"test")
+	public void updateEventStatus() throws InterruptedException{
+		this.checkEventStatus();
+	}
 
-		).collect(Collectors.toList());
+	@PostConstruct
+	public void addDefaultUserCredits() {
+
 		List<Country> countryList = Stream.of(
 				new Country(0L,"Polska","POL"),
 				new Country(0L,"Niemcy","GER"),

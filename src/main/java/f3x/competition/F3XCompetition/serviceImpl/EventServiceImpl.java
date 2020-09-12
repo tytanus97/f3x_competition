@@ -124,6 +124,14 @@ public class EventServiceImpl implements EventService {
         LocalDate currentDate = LocalDate.now();
         eventList.forEach(event -> {
             if(event.getEndDate().compareTo(currentDate) < 0) {
+                List<Round> roundList = event.getRoundList();
+                if(roundList != null && !roundList.isEmpty()) {
+                    roundList.forEach(r -> {
+                        if(r.getRoundStatus()) {
+                            this.roundService.finalizeRound(Optional.of(roundList.get(roundList.size()-1)));
+                        }
+                    });
+                }
                 event.setEventStatus(false);
                 event.setRegistrationStatus(false);
                 this.eventRepository.save(event);

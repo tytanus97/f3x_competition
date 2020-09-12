@@ -22,7 +22,7 @@ public class FlightController {
         this.flightService = flightService;
     }
 
-    @DeleteMapping("/deleteFlight/{flightId}")
+    @DeleteMapping("/{flightId}/delete")
     public ResponseEntity deleteFlightById(@PathVariable Long flightId) {
         this.flightService.deleteFlightByFlightId(flightId);
         return new ResponseEntity(HttpStatus.OK);

@@ -14,4 +14,5 @@ public interface RoundService {
     Flight addFlightToRound(Round round,Flight flight);
     void removeFlightFromRound(Round round,Flight flight);
     void removeRound(Round round);
+    boolean finalizeRound(Optional<Round> tmpRound);
 }

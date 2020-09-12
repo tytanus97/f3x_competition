@@ -163,25 +163,10 @@ public class EventController {
     }
 
     @PutMapping("/rounds/{roundId}/finalizeRound")
-    public ResponseEntity finalizeRound(@PathVariable Long roundId, @RequestBody RoundDTO roundDTO) {
+    public ResponseEntity finalizeRound(@PathVariable Long roundId) {
         Optional<Round> tmpRound = this.roundService.findById(roundId);
-        Round requestRound = ((RoundServiceImpl)this.roundService).roundDTOtoRound(roundDTO);
-        return tmpRound.map(round -> {
-           round.getEvent().getPilotList().forEach(pilot -> {
-                Optional<Flight> containedFlight = requestRound.getFlightList().stream()
-                        .filter(flight -> flight.getPilot().getPilotId().equals(pilot.getPilotId())).findAny();
-                if(containedFlight.isEmpty()) this.flightService.saveFlight(new Flight(pilot,round,0,0,0,0));
-
-            });
-            round.setRoundStatus(false);
-            Round updatedRound = this.roundService.saveRound(round);
-            System.out.println(updatedRound.getFlightList().toString() + " id rundy: " + updatedRound.getRoundId());
-            if(updatedRound == null) {
-                return new ResponseEntity(HttpStatus.NOT_FOUND);
-            }
-            return new ResponseEntity(HttpStatus.OK);
-        }).orElse(new ResponseEntity<>(HttpStatus.BAD_REQUEST));
-
+        boolean isRoundFinalized = this.roundService.finalizeRound(tmpRound);
+        return isRoundFinalized?new ResponseEntity(HttpStatus.OK): new ResponseEntity(HttpStatus.BAD_REQUEST);
     }
 
     @DeleteMapping("/{eventId}/rounds/{roundId}")
