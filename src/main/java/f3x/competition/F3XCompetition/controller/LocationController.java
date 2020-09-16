@@ -38,8 +38,14 @@ public class LocationController {
     public ResponseEntity<List<LocationDTO>> findAllLocations() {
         List<Location> locations = this.locationService.findAll();
 
-        return new ResponseEntity<>(locations.stream().map(((LocationServiceImpl) this.locationService)::locationToLocationDTO)
-                .collect(Collectors.toList()),HttpStatus.OK);
+        List<LocationDTO> locationDTOList = locations.stream().map(l -> {
+           Optional<List<Image>> imageList = this.imageService.findByEntityIdAndEntityType(l.getLocationId(),"location");
+           LocationDTO locationDTO = ((LocationServiceImpl)this.locationService).locationToLocationDTO(l);
+           locationDTO.setImageList(imageList.orElse(null));
+           return locationDTO;
+
+        }).collect(Collectors.toList());
+        return new ResponseEntity<>(locationDTOList,HttpStatus.OK);
     }
 
     @GetMapping("/{locationId}")

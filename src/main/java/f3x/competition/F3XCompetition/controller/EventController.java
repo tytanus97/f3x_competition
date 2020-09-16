@@ -1,5 +1,6 @@
 package f3x.competition.F3XCompetition.controller;
 
+
 import f3x.competition.F3XCompetition.dto.EventDTO;
 import f3x.competition.F3XCompetition.dto.FlightDTO;
 import f3x.competition.F3XCompetition.dto.RoundDTO;
@@ -54,7 +55,6 @@ public class EventController {
         Optional<Event> tmpEvent = this.eventService.findById(eventId);
         return tmpEvent.map(event -> new ResponseEntity<>(((EventServiceImpl)this.eventService).eventToEventDTO(event),HttpStatus.OK))
                 .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-
     }
 
     @GetMapping("/{eventId}/rounds")
@@ -167,6 +167,17 @@ public class EventController {
         Optional<Round> tmpRound = this.roundService.findById(roundId);
         boolean isRoundFinalized = this.roundService.finalizeRound(tmpRound);
         return isRoundFinalized?new ResponseEntity(HttpStatus.OK): new ResponseEntity(HttpStatus.BAD_REQUEST);
+    }
+
+    @PutMapping("{eventId}/finishEvent")
+    public ResponseEntity finalizeEvent(@PathVariable Long eventId) {
+        Optional<Event> tmpEvent = this.eventService.findById(eventId);
+        if(tmpEvent.isEmpty()) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+
+       this.eventService.finalizeEvent(tmpEvent.get());
+        return new ResponseEntity(HttpStatus.OK);
     }
 
     @DeleteMapping("/{eventId}/rounds/{roundId}")

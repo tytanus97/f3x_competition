@@ -17,7 +17,7 @@ public interface EventService {
     Round addRoundToEvent(Event event, Round round);
     void removeRoundFromEvent(Event event,Round round);
     List<Round> findEventRounds(Event event);
-
+    Event finalizeEvent(Event event);
 
     void checkEventStatusTrue();
 }

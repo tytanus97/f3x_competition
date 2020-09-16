@@ -102,15 +102,6 @@ public class EventServiceImpl implements EventService {
         this.eventRepository.delete(event);
     }
 
-    @PostConstruct
-    private void config() {
-        this.modelMapper.typeMap(EventDTO.class,Event.class)
-                .addMapping(EventDTO::getPilotDirector,Event::setPilotDirector);
-
-        this.modelMapper.typeMap(Event.class,EventDTO.class)
-                .addMapping(Event::getPilotDirector,EventDTO::setPilotDirector);
-    }
-
     public Event eventDTOtoEvent(EventDTO eventDTO) {
         return this.modelMapper.map(eventDTO,Event.class);
     }
@@ -119,23 +110,39 @@ public class EventServiceImpl implements EventService {
         return this.modelMapper.map(event,EventDTO.class);
     }
 
+    @Transactional
     public void checkEventStatusTrue() {
         List<Event> eventList = this.eventRepository.findAllByStatusTrue();
         LocalDate currentDate = LocalDate.now();
         eventList.forEach(event -> {
             if(event.getEndDate().compareTo(currentDate) < 0) {
-                List<Round> roundList = event.getRoundList();
-                if(roundList != null && !roundList.isEmpty()) {
-                    roundList.forEach(r -> {
-                        if(r.getRoundStatus()) {
-                            this.roundService.finalizeRound(Optional.of(roundList.get(roundList.size()-1)));
-                        }
-                    });
-                }
-                event.setEventStatus(false);
-                event.setRegistrationStatus(false);
-                this.eventRepository.save(event);
+                this.finalizeEvent(event);
             }
         });
+    }
+    @Override
+    @Transactional
+    public Event finalizeEvent(Event event) {
+        List<Round> roundList = event.getRoundList();
+        if(roundList != null && !roundList.isEmpty()) {
+            roundList.forEach(r -> {
+                if(r.getRoundStatus()) {
+                    this.roundService.finalizeRound(Optional.of(roundList.get(roundList.size()-1)));
+                }
+            });
+        }
+        event.setEventStatus(false);
+        event.setRegistrationStatus(false);
+
+        return this.eventRepository.save(event);
+
+    }
+    @PostConstruct
+    private void config() {
+        this.modelMapper.typeMap(EventDTO.class,Event.class)
+                .addMapping(EventDTO::getPilotDirector,Event::setPilotDirector);
+
+        this.modelMapper.typeMap(Event.class,EventDTO.class)
+                .addMapping(Event::getPilotDirector,EventDTO::setPilotDirector);
     }
 }

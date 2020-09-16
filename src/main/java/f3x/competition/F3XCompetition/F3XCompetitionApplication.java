@@ -29,21 +29,7 @@ import java.util.stream.Stream;
 public class F3XCompetitionApplication {
 
 	@Autowired
-	private PilotCredentialRepository pilotCredentialRepository;
-	@Autowired
-	private CountryRepository countryRepository;
-
-	@Autowired
 	private EventService eventService;
-
-	@Autowired
-	private LocationRepository locationRepository;
-
-	@Autowired
-	private EventRepository eventRepository;
-
-	@Autowired
-	private PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(F3XCompetitionApplication.class, args);
