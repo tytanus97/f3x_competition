@@ -1,7 +1,6 @@
 package f3x.competition.F3XCompetition.serviceImpl;
 
 import f3x.competition.F3XCompetition.dto.EventDTO;
-import f3x.competition.F3XCompetition.dto.PilotDTO;
 import f3x.competition.F3XCompetition.entity.Event;
 import f3x.competition.F3XCompetition.entity.Pilot;
 import f3x.competition.F3XCompetition.entity.Round;
@@ -10,16 +9,13 @@ import f3x.competition.F3XCompetition.service.EventService;
 import f3x.competition.F3XCompetition.service.PilotService;
 import f3x.competition.F3XCompetition.service.RoundService;
 import org.modelmapper.ModelMapper;
-import org.modelmapper.PropertyMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.time.LocalDate;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class EventServiceImpl implements EventService {
@@ -28,6 +24,8 @@ public class EventServiceImpl implements EventService {
     private final PilotService pilotService;
     private final RoundService roundService;
     private final ModelMapper modelMapper;
+
+
 
     @Autowired
     public EventServiceImpl(EventRepository eventRepository, PilotService pilotService, RoundService roundService, ModelMapper modelMapper) {
@@ -125,8 +123,10 @@ public class EventServiceImpl implements EventService {
     public Event finalizeEvent(Event event) {
         List<Round> roundList = event.getRoundList();
         if(roundList != null && !roundList.isEmpty()) {
+            rewardFirstPilot(roundList,event);
             roundList.forEach(r -> {
                 if(r.getRoundStatus()) {
+                    //finalize last round if not finalized
                     this.roundService.finalizeRound(Optional.of(roundList.get(roundList.size()-1)));
                 }
             });
@@ -137,6 +137,46 @@ public class EventServiceImpl implements EventService {
         return this.eventRepository.save(event);
 
     }
+
+    @Transactional
+    protected void rewardFirstPilot(List<Round> roundList,Event event) {
+        Map<Long,Float> pilotPointMap = new HashMap<>();
+        roundList.forEach(r -> {
+            r.getFlightList().forEach(f -> {
+                if(pilotPointMap.containsKey(f.getPilot().getPilotId())) {
+                    pilotPointMap.put(f.getPilot().getPilotId(),
+                            pilotPointMap.get(f.getPilot().getPilotId()) + f.getTotal());
+                }
+                else pilotPointMap.put(f.getPilot().getPilotId(),f.getTotal());
+            });
+        });
+
+        //find all biggest point values
+        float currMaxPoint = 0;
+        Stack<Map.Entry<Long,Float>> pilotPointsStack = new Stack<>();
+        for(Map.Entry<Long,Float> e: pilotPointMap.entrySet()) {
+            if(e.getValue() >= currMaxPoint) {
+                currMaxPoint = e.getValue();
+                pilotPointsStack.push(e);
+            }
+        }
+
+        if(!pilotPointsStack.empty()) {
+            Map.Entry<Long,Float> biggest = pilotPointsStack.pop();
+            System.out.println(biggest.toString());
+            //reward pilot add to rating 10 times number of pilots participating in particular event
+            this.pilotService.addToPilotRating(biggest.getKey(),(10L * event.getPilotList().size()));
+
+            while(!pilotPointsStack.empty())  {
+                Map.Entry<Long,Float> tmp = pilotPointsStack.pop();
+                if(tmp.getValue().equals(biggest.getValue())) {
+                    this.pilotService.addToPilotRating(tmp.getKey(),(10L * event.getPilotList().size()));
+                    System.out.println(tmp.toString());
+                }
+            }
+        }
+    }
+
     @PostConstruct
     private void config() {
         this.modelMapper.typeMap(EventDTO.class,Event.class)

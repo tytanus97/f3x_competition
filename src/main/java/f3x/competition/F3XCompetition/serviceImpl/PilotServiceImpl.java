@@ -112,6 +112,15 @@ public class PilotServiceImpl implements PilotService {
         return this.pilotRepository.findAllByCountry_CountryName(countryName);
     }
 
+    @Override
+    @Transactional
+    public void addToPilotRating(Long pilotId, Long value) {
+        Optional<Pilot> tmpPilot = this.pilotRepository.findById(pilotId);
+        tmpPilot.ifPresent(p -> {
+            p.setPilotRating(p.getPilotRating() + value);
+            this.pilotRepository.save(p);
+        });
+    }
 
     public PilotDTO pilotToPilotDTO(Pilot pilot) {
         return modelMapper.map(pilot,PilotDTO.class);

@@ -19,4 +19,5 @@ public interface PilotService {
     PilotCredential savePilotCredential(PilotCredential pilotCredential);
 
     Optional<List<Pilot>> findAllByCountryName(String countryName);
+    void addToPilotRating(Long pilotId,Long value);
 }
