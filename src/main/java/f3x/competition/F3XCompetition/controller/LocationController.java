@@ -48,6 +48,14 @@ public class LocationController {
         return new ResponseEntity<>(locationDTOList,HttpStatus.OK);
     }
 
+    @GetMapping("/country/{countryName}")
+    public ResponseEntity<List<LocationDTO>> findLocationsByCountryName(@PathVariable String countryName) {
+        List<LocationDTO> resultList = this.locationService.findByCountryName(countryName)
+                .stream().map(((LocationServiceImpl) this.locationService)::locationToLocationDTO).collect(Collectors.toList());
+
+        return new ResponseEntity<>(resultList,HttpStatus.OK);
+    }
+
     @GetMapping("/{locationId}")
     public ResponseEntity<LocationDTO> findLocationById(@PathVariable Long locationId) {
         Optional<Location> tmpLocation = this.locationService.findById(locationId);

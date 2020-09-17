@@ -42,6 +42,11 @@ public class LocationServiceImpl implements LocationService {
         return this.locationRepository.findById(locationId);
     }
 
+    @Override
+    @Transactional
+    public List<Location> findByCountryName(String countryName) {
+        return this.locationRepository.findAllByCountry_CountryName(countryName);
+    }
 
     public LocationDTO locationToLocationDTO(Location location) {
         return this.modelMapper.map(location,LocationDTO.class);

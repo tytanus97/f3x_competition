@@ -9,4 +9,5 @@ public interface LocationService {
     Location save(Location location);
     List<Location> findAll();
     Optional<Location> findById(Long locationId);
+    List<Location> findByCountryName(String countryName);
 }
